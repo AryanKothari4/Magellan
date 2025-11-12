@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magellan - Your European University Journey</title>
+    <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <style>
         * {
@@ -19,6 +20,26 @@
             overflow-x: hidden;
         }
 
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #3b82f6;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
         header {
             position: fixed;
             top: 0;
@@ -31,6 +52,7 @@
             align-items: center;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
             z-index: 1000;
+            transform: translateY(-100px);
         }
 
         .logo {
@@ -39,6 +61,23 @@
             font-weight: 700;
             color: #1e40af;
             letter-spacing: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1e40af, #ea580c);
+            transition: width 0.3s;
+        }
+
+        .logo:hover::after {
+            width: 100%;
         }
 
         nav a {
@@ -47,6 +86,7 @@
             color: #333;
             font-weight: 500;
             transition: color 0.3s;
+            position: relative;
         }
 
         nav a:hover {
@@ -62,6 +102,26 @@
             font-weight: 600;
             transition: transform 0.3s, box-shadow 0.3s;
             display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .cta-button:hover {
@@ -87,6 +147,8 @@
             text-align: center;
             padding: 4rem 5%;
             background: linear-gradient(135deg, #f0f9ff 0%, #fff 100%);
+            position: relative;
+            z-index: 2;
         }
 
         .hero h1 {
@@ -95,6 +157,18 @@
             color: #1e40af;
             margin-bottom: 1.5rem;
             opacity: 0;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 200%;
+            animation: gradient 5s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .hero p {
@@ -105,10 +179,36 @@
             opacity: 0;
         }
 
+        /* Decorative shapes in hero */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .shape1 {
+            width: 300px;
+            height: 300px;
+            background: #1e40af;
+            top: 10%;
+            right: 10%;
+        }
+
+        .shape2 {
+            width: 200px;
+            height: 200px;
+            background: #ea580c;
+            bottom: 20%;
+            left: 5%;
+        }
+
         .section {
             padding: 6rem 5%;
             max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .section-title {
@@ -117,6 +217,19 @@
             color: #1e40af;
             margin-bottom: 1rem;
             text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #1e40af, #ea580c);
+            border-radius: 2px;
         }
 
         .section-subtitle {
@@ -143,10 +256,27 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
             transition: transform 0.3s, box-shadow 0.3s;
             border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(30, 64, 175, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .benefit-card:hover::before {
+            left: 100%;
         }
 
         .benefit-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) rotate(2deg);
             box-shadow: 0 20px 50px rgba(30, 64, 175, 0.15);
             border-color: #1e40af;
         }
@@ -154,6 +284,7 @@
         .benefit-icon {
             font-size: 3rem;
             margin-bottom: 1.5rem;
+            display: inline-block;
         }
 
         .benefit-card h3 {
@@ -181,11 +312,30 @@
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
             border: 3px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(30, 64, 175, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pricing-card:hover::after {
+            opacity: 1;
         }
 
         .pricing-card.featured {
             border-color: #ea580c;
             transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(234, 88, 12, 0.2);
         }
 
         .pricing-card:hover {
@@ -201,6 +351,8 @@
             font-weight: 800;
             color: #1e40af;
             margin: 1rem 0;
+            position: relative;
+            z-index: 1;
         }
 
         .pricing-card.featured .price {
@@ -211,11 +363,15 @@
             font-size: 1.8rem;
             color: #333;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .features-list {
             list-style: none;
             margin: 2rem 0;
+            position: relative;
+            z-index: 1;
         }
 
         .features-list li {
@@ -223,6 +379,8 @@
             color: #666;
             position: relative;
             padding-left: 2rem;
+            opacity: 0;
+            transform: translateX(-20px);
         }
 
         .features-list li:before {
@@ -243,6 +401,19 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 3rem;
             margin-top: 4rem;
+            position: relative;
+        }
+
+        /* Connection lines between steps */
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 20%;
+            right: 20%;
+            height: 2px;
+            background: linear-gradient(90deg, #1e40af, #ea580c);
+            z-index: -1;
         }
 
         .step-card {
@@ -262,6 +433,29 @@
             align-items: center;
             justify-content: center;
             margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.3);
+            position: relative;
+        }
+
+        .step-number::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #1e40af;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0;
+            }
         }
 
         .step-card h3 {
@@ -281,17 +475,39 @@
             padding: 6rem 5%;
             text-align: center;
             margin-top: 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .cta-section h2 {
             font-size: 3rem;
             margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         .cta-section p {
             font-size: 1.3rem;
             margin-bottom: 2.5rem;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
 
         footer {
@@ -299,6 +515,33 @@
             color: white;
             padding: 3rem 5%;
             text-align: center;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+        }
+
+        .scroll-indicator::before {
+            content: '↓';
+            font-size: 2rem;
+            color: #1e40af;
         }
 
         @media (max-width: 768px) {
@@ -317,11 +560,21 @@
             .pricing-card.featured {
                 transform: scale(1);
             }
+
+            .steps-container::before {
+                display: none;
+            }
+
+            .shape1, .shape2 {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
+    <div class="particles" id="particles"></div>
+
+    <header id="header">
         <div class="logo">MAGELLAN</div>
         <nav>
             <a href="search.html" class="cta-button">Find Your University</a>
@@ -329,9 +582,12 @@
     </header>
 
     <section class="hero">
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
         <h1>Search for your Ideal University</h1>
         <p>Turning moving abroad into a plan, not just a dream.</p>
         <a href="search.html" class="cta-button orange">Start Your Journey</a>
+        <div class="scroll-indicator"></div>
     </section>
 
     <section class="section">
@@ -442,12 +698,68 @@
     </footer>
 
     <script>
+        // Create particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particlesContainer.appendChild(particle);
+        }
+
+        // Animate particles
+        anime({
+            targets: '.particle',
+            translateY: [0, -1000],
+            translateX: () => anime.random(-100, 100),
+            opacity: [0.3, 0],
+            duration: () => anime.random(3000, 6000),
+            easing: 'linear',
+            loop: true,
+            delay: anime.stagger(100)
+        });
+
+        // Animate header on load
+        anime({
+            targets: '#header',
+            translateY: [-100, 0],
+            opacity: [0, 1],
+            duration: 1000,
+            easing: 'easeOutExpo',
+            delay: 300
+        });
+
+        // Animate floating shapes
+        anime({
+            targets: '.shape1',
+            translateY: [0, 50],
+            translateX: [0, 30],
+            scale: [1, 1.2],
+            duration: 8000,
+            easing: 'easeInOutSine',
+            loop: true,
+            direction: 'alternate'
+        });
+
+        anime({
+            targets: '.shape2',
+            translateY: [0, -40],
+            translateX: [0, -20],
+            scale: [1, 1.3],
+            duration: 6000,
+            easing: 'easeInOutSine',
+            loop: true,
+            direction: 'alternate'
+        });
+
         // Animate hero section on load
         anime.timeline({loop: false})
             .add({
                 targets: '.hero h1',
                 opacity: [0, 1],
                 translateY: [50, 0],
+                scale: [0.9, 1],
                 duration: 1200,
                 easing: 'easeOutExpo'
             })
@@ -479,6 +791,7 @@
                         targets: entry.target,
                         opacity: [0, 1],
                         translateY: [50, 0],
+                        rotate: [5, 0],
                         duration: 1000,
                         easing: 'easeOutExpo'
                     });
@@ -487,15 +800,51 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.benefit-card, .pricing-card, .step-card').forEach(card => {
+        document.querySelectorAll('.benefit-card, .step-card').forEach(card => {
             card.style.opacity = '0';
             observer.observe(card);
+        });
+
+        // Animate pricing cards
+        const pricingObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        opacity: [0, 1],
+                        translateY: [100, 0],
+                        scale: [0.8, entry.target.classList.contains('featured') ? 1.05 : 1],
+                        duration: 1000,
+                        delay: index * 200,
+                        easing: 'easeOutExpo'
+                    });
+
+                    // Animate feature list items
+                    const features = entry.target.querySelectorAll('.features-list li');
+                    anime({
+                        targets: features,
+                        opacity: [0, 1],
+                        translateX: [-20, 0],
+                        duration: 600,
+                        delay: anime.stagger(100, {start: 500}),
+                        easing: 'easeOutExpo'
+                    });
+
+                    pricingObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.pricing-card').forEach(card => {
+            card.style.opacity = '0';
+            pricingObserver.observe(card);
         });
 
         // Floating animation for benefit icons
         anime({
             targets: '.benefit-icon',
             translateY: [-10, 10],
+            rotate: [-5, 5],
             duration: 2000,
             loop: true,
             direction: 'alternate',
@@ -511,6 +860,49 @@
                 easing: 'easeInOutQuad'
             });
         }, 3000);
+
+        // Animate section titles on scroll
+        const titleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        opacity: [0, 1],
+                        translateY: [-30, 0],
+                        duration: 800,
+                        easing: 'easeOutExpo'
+                    });
+                    titleObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-title').forEach(title => {
+            title.style.opacity = '0';
+            titleObserver.observe(title);
+        });
+
+        // Mouse parallax effect for shapes
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+
+            anime({
+                targets: '.shape1',
+                translateX: mouseX * 50,
+                translateY: mouseY * 50,
+                duration: 1000,
+                easing: 'easeOutExpo'
+            });
+
+            anime({
+                targets: '.shape2',
+                translateX: mouseX * -30,
+                translateY: mouseY * -30,
+                duration: 1000,
+                easing: 'easeOutExpo'
+            });
+        });
     </script>
 </body>
 </html>

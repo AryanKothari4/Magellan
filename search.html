@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magellan - Find Your University</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #fff 50%, #fff5f0 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .search-container {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .search-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .search-header h1 {
+            font-size: 3rem;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-header p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        .search-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .search-section h3 {
+            color: #1e40af;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .interest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .interest-tag {
+            background: linear-gradient(135deg, #f0f9ff, #fff);
+            border: 2px solid #e5e7eb;
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .interest-tag:hover {
+            border-color: #1e40af;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.15);
+        }
+
+        .interest-tag.selected {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            border-color: #1e40af;
+        }
+
+        .interest-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .search-button {
+            width: 100%;
+            background: linear-gradient(135deg, #ea580c, #f97316);
+            color: white;
+            padding: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 2rem;
+        }
+
+        .search-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(234, 88, 12, 0.3);
+        }
+
+        .search-button:active {
+            transform: translateY(-1px);
+        }
+
+        .results-container {
+            margin-top: 3rem;
+            opacity: 0;
+            display: none;
+        }
+
+        .result-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #1e40af;
+            transition: transform 0.3s;
+        }
+
+        .result-card:hover {
+            transform: translateX(10px);
+        }
+
+        .result-card h4 {
+            color: #1e40af;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-card .location {
+            color: #ea580c;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .result-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .result-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .result-tag {
+            background: #f0f9ff;
+            color: #1e40af;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .search-header h1 {
+                font-size: 2rem;
+            }
+
+            .interest-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .search-box {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">MAGELLAN</a>
+    </header>
+
+    <div class="search-container">
+        <div class="search-header">
+            <h1>Find Your Perfect University</h1>
+            <p>Select your interests and discover European universities that match your lifestyle</p>
+        </div>
+
+        <div class="search-box">
+            <div class="search-section">
+                <h3>What are your interests?</h3>
+                <p style="color: #666; margin-bottom: 1rem;">Select all that apply</p>
+                <div class="interest-grid">
+                    <div class="interest-tag" data-interest="food">
+                        <span class="interest-icon">🍕</span>
+                        Food Culture
+                    </div>
+                    <div class="interest-tag" data-interest="f1">
+                        <span class="interest-icon">🏎️</span>
+                        F1 Racing
+                    </div>
+                    <div class="interest-tag" data-interest="party">
+                        <span class="interest-icon">🎉</span>
+                        Nightlife
+                    </div>
+                    <div class="interest-tag" data-interest="art">
+                        <span class="interest-icon">🎨</span>
+                        Art & Museums
+                    </div>
+                    <div class="interest-tag" data-interest="nature">
+                        <span class="interest-icon">🏔️</span>
+                        Nature & Hiking
+                    </div>
+                    <div class="interest-tag" data-interest="history">
+                        <span class="interest-icon">🏛️</span>
+                        History
+                    </div>
+                    <div class="interest-tag" data-interest="tech">
+                        <span class="interest-icon">💻</span>
+                        Tech Scene
+                    </div>
+                    <div class="interest-tag" data-interest="sports">
+                        <span class="interest-icon">⚽</span>
+                        Sports
+                    </div>
+                    <div class="interest-tag" data-interest="music">
+                        <span class="interest-icon">🎵</span>
+                        Music & Festivals
+                    </div>
+                    <div class="interest-tag" data-interest="beach">
+                        <span class="interest-icon">🏖️</span>
+                        Beach & Coast
+                    </div>
+                    <div class="interest-tag" data-interest="fashion">
+                        <span class="interest-icon">👗</span>
+                        Fashion
+                    </div>
+                    <div class="interest-tag" data-interest="cafe">
+                        <span class="interest-icon">☕</span>
+                        Café Culture
+                    </div>
+                </div>
+            </div>
+
+            <button class="search-button" onclick="searchUniversities()">Find My Universities</button>
+        </div>
+
+        <div class="results-container" id="results">
+            <h3 style="color: #1e40af; font-size: 1.8rem; margin-bottom: 1.5rem;">Your Matches</h3>
+            <div id="results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Animate on load
+        anime({
+            targets: '.search-header h1',
+            opacity: [0, 1],
+            translateY: [-30, 0],
+            duration: 1000,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.search-header p',
+            opacity: [0, 1],
+            translateY: [-20, 0],
+            duration: 1000,
+            delay: 200,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.search-box',
+            opacity: [0, 1],
+            translateY: [50, 0],
+            duration: 1000,
+            delay: 400,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.interest-tag',
+            opacity: [0, 1],
+            scale: [0.8, 1],
+            duration: 600,
+            delay: anime.stagger(50, {start: 600}),
+            easing: 'easeOutExpo'
+        });
+
+        // Handle interest selection
+        const selectedInterests = new Set();
+        
+        document.querySelectorAll('.interest-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                const interest = this.dataset.interest;
+                
+                if (this.classList.contains('selected')) {
+                    this.classList.remove('selected');
+                    selectedInterests.delete(interest);
+                    
+                    anime({
+                        targets: this,
+                        scale: [1.1, 1],
+                        duration: 300,
+                        easing: 'easeOutExpo'
+                    });
+                } else {
+                    this.classList.add('selected');
+                    selectedInterests.add(interest);
+                    
+                    anime({
+                        targets: this,
+                        scale: [1, 1.1, 1],
+                        duration: 500,
+                        easing: 'easeOutElastic(1, .6)'
+                    });
+                }
+            });
+        });
+
+        // Sample university data
+        const universities = [
+            {
+                name: "University of Barcelona",
+                location: "Barcelona, Spain",
+                description: "Located in one of Europe's most vibrant cities, perfect for food lovers, beach enthusiasts, and those who love art and culture.",
+                tags: ["food", "beach", "art", "party"],
+                icon: "🇪🇸"
+            },
+            {
+                name: "Technical University of Munich",
+                location: "Munich, Germany",
+                description: "World-class engineering programs in a city known for its tech scene, rich history, and proximity to the Alps.",
+                tags: ["tech", "history", "nature", "sports"],
+                icon: "🇩🇪"
+            },
+            {
+                name: "University of Amsterdam",
+                location: "Amsterdam, Netherlands",
+                description: "Study in the heart of a progressive city with amazing café culture, museums, and cycling everywhere.",
+                tags: ["cafe", "art", "history", "party"],
+                icon: "🇳🇱"
+            },
+            {
+                name: "Bocconi University",
+                location: "Milan, Italy",
+                description: "Premier business school in the global fashion capital, surrounded by incredible food and culture.",
+                tags: ["fashion", "food", "art", "cafe"],
+                icon: "🇮🇹"
+            },
+            {
+                name: "École Polytechnique Fédérale",
+                location: "Lausanne, Switzerland",
+                description: "Top-tier STEM programs with stunning mountain views and access to world-class skiing and hiking.",
+                tags: ["tech", "nature", "sports"],
+                icon: "🇨🇭"
+            }
+        ];
+
+        function searchUniversities() {
+            if (selectedInterests.size === 0) {
+                alert('Please select at least one interest!');
+                return;
+            }
+
+            const resultsContainer = document.getElementById('results');
+            const resultsList = document.getElementById('results-list');
+            
+            // Filter universities based on interests
+            const matches = universities.filter(uni => 
+                uni.tags.some(tag => selectedInterests.has(tag))
+            ).sort((a, b) => {
+                const aMatches = a.tags.filter(tag => selectedInterests.has(tag)).length;
+                const bMatches = b.tags.filter(tag => selectedInterests.has(tag)).length;
+                return bMatches - aMatches;
+            });
+
+            // Display results
+            resultsList.innerHTML = matches.map(uni => `
+                <div class="result-card">
+                    <h4>${uni.icon} ${uni.name}</h4>
+                    <div class="location">📍 ${uni.location}</div>
+                    <p>${uni.description}</p>
+                    <div class="result-tags">
+                        ${uni.tags.map(tag => `<span class="result-tag">${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            // Show results with animation
+            resultsContainer.style.display = 'block';
+            
+            anime({
+                targets: resultsContainer,
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 800,
+                easing: 'easeOutExpo'
+            });
+
+            anime({
+                targets: '.result-card',
+                opacity: [0, 1],
+                translateX: [-50, 0],
+                duration: 600,
+                delay: anime.stagger(150),
+                easing: 'easeOutExpo'
+            });
+
+            // Scroll to results
+            setTimeout(() => {
+                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+    </script>
+</body>
+</html>
