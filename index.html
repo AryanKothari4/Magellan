@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magellan - Your European University Journey</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            letter-spacing: 2px;
+        }
+
+        nav a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #1e40af;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.3);
+        }
+
+        .cta-button.orange {
+            background: linear-gradient(135deg, #ea580c, #f97316);
+        }
+
+        .cta-button.orange:hover {
+            box-shadow: 0 10px 25px rgba(234, 88, 12, 0.3);
+        }
+
+        .hero {
+            margin-top: 100px;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, #f0f9ff 0%, #fff 100%);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            opacity: 0;
+        }
+
+        .section {
+            padding: 6rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(30, 64, 175, 0.15);
+            border-color: #1e40af;
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.5rem;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 25px;
+            padding: 3rem;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            border: 3px solid #e5e7eb;
+        }
+
+        .pricing-card.featured {
+            border-color: #ea580c;
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .pricing-card.featured:hover {
+            transform: translateY(-10px) scale(1.07);
+        }
+
+        .price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin: 1rem 0;
+        }
+
+        .pricing-card.featured .price {
+            color: #ea580c;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .features-list li {
+            padding: 0.75rem 0;
+            color: #666;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .features-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #1e40af;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .pricing-card.featured .features-list li:before {
+            color: #ea580c;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step-card h3 {
+            font-size: 1.5rem;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+
+        .step-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 6rem 5%;
+            text-align: center;
+            margin-top: 6rem;
+        }
+
+        .cta-section h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+
+        footer {
+            background: #1f2937;
+            color: white;
+            padding: 3rem 5%;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">MAGELLAN</div>
+        <nav>
+            <a href="search.html" class="cta-button">Find Your University</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Search for your Ideal University</h1>
+        <p>Turning moving abroad into a plan, not just a dream.</p>
+        <a href="search.html" class="cta-button orange">Start Your Journey</a>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Why Choose Europe?</h2>
+        <p class="section-subtitle">Experience world-class education at a fraction of the cost, immerse yourself in diverse cultures, and build a truly global network.</p>
+        
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">💰</div>
+                <h3>Affordable Excellence</h3>
+                <p>European universities offer top-tier education at significantly lower tuition costs compared to US institutions. Many programs cost 50-80% less than American equivalents.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🌍</div>
+                <h3>Cultural Immersion</h3>
+                <p>Live in historic cities, learn new languages, and experience diverse cultures firsthand. Europe offers unparalleled opportunities for personal growth and adventure.</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">🎓</div>
+                <h3>Global Recognition</h3>
+                <p>Degrees from European universities are recognized worldwide and highly valued by employers. Build an international network that spans continents.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background: linear-gradient(135deg, #fff5f0 0%, #fff 100%);">
+        <h2 class="section-title">How Magellan Works</h2>
+        <p class="section-subtitle">We've simplified the process of finding and applying to your dream European university.</p>
+        
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Share Your Interests</h3>
+                <p>Tell us about your hobbies, passions, and lifestyle preferences. Love F1 racing? Enjoy food culture? We'll match you accordingly.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Discover Matches</h3>
+                <p>Our intelligent search engine analyzes European universities and cities to find perfect matches based on your unique profile.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Get Support</h3>
+                <p>Choose a plan that fits your needs and receive personalized guidance throughout your journey from applications to arrival.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Choose Your Plan</h2>
+        <p class="section-subtitle">Select the level of support that's right for your European university journey.</p>
+        
+        <div class="pricing-container">
+            <div class="pricing-card">
+                <h3>Starter</h3>
+                <div class="price">$25</div>
+                <ul class="features-list">
+                    <li>University matching based on interests</li>
+                    <li>City lifestyle overview</li>
+                    <li>Basic cost of living estimates</li>
+                    <li>Program recommendations</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="search.html" class="cta-button">Get Started</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <h3>Professional</h3>
+                <div class="price">$50</div>
+                <ul class="features-list">
+                    <li>Everything in Starter</li>
+                    <li>Detailed visa requirements guide</li>
+                    <li>Application timeline planning</li>
+                    <li>Housing resources and tips</li>
+                    <li>Language requirement analysis</li>
+                    <li>Document checklist</li>
+                    <li>Priority email support</li>
+                </ul>
+                <a href="search.html" class="cta-button orange">Most Popular</a>
+            </div>
+
+            <div class="pricing-card">
+                <h3>Premium</h3>
+                <div class="price">$100</div>
+                <ul class="features-list">
+                    <li>Everything in Professional</li>
+                    <li>One-on-one consultation call</li>
+                    <li>Personalized application strategy</li>
+                    <li>Visa application assistance</li>
+                    <li>Pre-departure preparation guide</li>
+                    <li>Banking and insurance guidance</li>
+                    <li>Scholarship opportunity research</li>
+                    <li>24/7 priority support</li>
+                </ul>
+                <a href="search.html" class="cta-button">Go Premium</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Your Future College Awaits...</h2>
+        <p>Join hundreds of students who have successfully moved abroad with Magellan's guidance.</p>
+        <a href="search.html" class="cta-button" style="background: white; color: #1e40af;">Start Searching Now</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Magellan. Making European university dreams a reality.</p>
+    </footer>
+
+    <script>
+        // Animate hero section on load
+        anime.timeline({loop: false})
+            .add({
+                targets: '.hero h1',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                duration: 1200,
+                easing: 'easeOutExpo'
+            })
+            .add({
+                targets: '.hero p',
+                opacity: [0, 1],
+                translateY: [30, 0],
+                duration: 1000,
+                easing: 'easeOutExpo'
+            }, '-=800')
+            .add({
+                targets: '.hero .cta-button',
+                opacity: [0, 1],
+                scale: [0.8, 1],
+                duration: 800,
+                easing: 'easeOutElastic(1, .8)'
+            }, '-=500');
+
+        // Animate cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        opacity: [0, 1],
+                        translateY: [50, 0],
+                        duration: 1000,
+                        easing: 'easeOutExpo'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.benefit-card, .pricing-card, .step-card').forEach(card => {
+            card.style.opacity = '0';
+            observer.observe(card);
+        });
+
+        // Floating animation for benefit icons
+        anime({
+            targets: '.benefit-icon',
+            translateY: [-10, 10],
+            duration: 2000,
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutSine'
+        });
+
+        // Pulse animation for CTA buttons
+        setInterval(() => {
+            anime({
+                targets: '.cta-section .cta-button',
+                scale: [1, 1.05, 1],
+                duration: 1000,
+                easing: 'easeInOutQuad'
+            });
+        }, 3000);
+    </script>
+</body>
+</html>
