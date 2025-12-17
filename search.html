@@ -5,7 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magellan - Find Your University</title>
     <link rel="icon" type="image/png" href="favicon.png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js">
+        function openModal(uni) {
+    document.getElementById('modalName').innerText = `${uni.icon} ${uni.name}`;
+    document.getElementById('modalLocation').innerText = `📍 ${uni.location}`;
+    document.getElementById('modalDescription').innerText = uni.description;
+
+    document.getElementById('modalTags').innerHTML =
+        uni.tags.map(tag => `<span class="result-tag">${tag}</span>`).join('');
+
+    document.getElementById('collegeModal').classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('collegeModal').classList.add('hidden');
+}
+    </script>
     <style>
         * {
             margin: 0;
@@ -354,6 +369,57 @@
                 width: 100%;
             }
         }
+        .modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+        }
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #6b7280;
+}
+
+.modal-tags {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
     </style>
 </head>
 <body>
@@ -839,5 +905,15 @@
             }, 300);
         }
     </script>
+    <!-- College Info Modal -->
+<div id="collegeModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <h2 id="modalName"></h2>
+        <p id="modalLocation"></p>
+        <p id="modalDescription"></p>
+        <div id="modalTags" class="modal-tags"></div>
+    </div>
+</div>
 </body>
 </html>
