@@ -851,7 +851,7 @@
                 }
 
                 return `
-                    <div class="result-card">
+                    <div class="result-card" onclick="showInfo('${uni.name}', '${uni.description}')">
                         <h4>${uni.icon} ${uni.name}</h4>
                         <div class="location">📍 ${uni.location}</div>
                         <p>${uni.description}</p>
@@ -939,6 +939,11 @@ colleges.forEach(college => {
 
     resultsDiv.appendChild(card);
 });
+function showInfo(name, info) {
+    document.getElementById("infoName").innerText = name;
+    document.getElementById("infoText").innerText = info;
+    document.getElementById("infoBox").style.display = "block";
+}
 </script>
 </body>
 </html>
