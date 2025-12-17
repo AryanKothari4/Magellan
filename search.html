@@ -5,22 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magellan - Find Your University</title>
     <link rel="icon" type="image/png" href="favicon.png">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js">
-        function openModal(uni) {
-    document.getElementById('modalName').innerText = `${uni.icon} ${uni.name}`;
-    document.getElementById('modalLocation').innerText = `📍 ${uni.location}`;
-    document.getElementById('modalDescription').innerText = uni.description;
-
-    document.getElementById('modalTags').innerHTML =
-        uni.tags.map(tag => `<span class="result-tag">${tag}</span>`).join('');
-
-    document.getElementById('collegeModal').classList.remove('hidden');
-}
-
-function closeModal() {
-    document.getElementById('collegeModal').classList.add('hidden');
-}
-    </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -905,15 +890,55 @@ function closeModal() {
             }, 300);
         }
     </script>
-    <!-- College Info Modal -->
-<div id="collegeModal" class="modal hidden">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">×</span>
-        <h2 id="modalName"></h2>
-        <p id="modalLocation"></p>
-        <p id="modalDescription"></p>
-        <div id="modalTags" class="modal-tags"></div>
-    </div>
+<div id="results"></div>
+
+<div id="infoBox" style="display:none; padding:20px; border-radius:12px; background:#f3f4f6; margin-top:20px;">
+    <h2 id="infoName"></h2>
+    <p id="infoText"></p>
 </div>
+<script>
+/* ===== SIMPLE COLLEGE INFO LOGIC ===== */
+
+const colleges = [
+    {
+        name: "University of Amsterdam",
+        info: "Top research university with many English-taught programs."
+    },
+    {
+        name: "ETH Zurich",
+        info: "World-leading university for engineering and science."
+    },
+    {
+        name: "University of Lisbon",
+        info: "One of Portugal’s largest universities with affordable tuition."
+    }
+];
+
+const resultsDiv = document.getElementById("results");
+const infoBox = document.getElementById("infoBox");
+const infoName = document.getElementById("infoName");
+const infoText = document.getElementById("infoText");
+
+// Render college list
+colleges.forEach(college => {
+    const card = document.createElement("div");
+    card.textContent = college.name;
+
+    card.style.padding = "15px";
+    card.style.margin = "10px 0";
+    card.style.border = "1px solid #ddd";
+    card.style.borderRadius = "10px";
+    card.style.cursor = "pointer";
+    card.style.background = "white";
+
+    card.addEventListener("click", () => {
+        infoName.textContent = college.name;
+        infoText.textContent = college.info;
+        infoBox.style.display = "block";
+    });
+
+    resultsDiv.appendChild(card);
+});
+</script>
 </body>
 </html>
