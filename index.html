@@ -20,24 +20,19 @@
             overflow-x: hidden;
         }
 
-        /* Animated background particles */
-        .particles {
+        /* Subtle animated grid background */
+        .grid-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(30, 64, 175, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(30, 64, 175, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
             pointer-events: none;
             z-index: 1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #3b82f6;
-            border-radius: 50%;
-            opacity: 0.3;
         }
 
         header {
@@ -146,13 +141,63 @@
             align-items: center;
             text-align: center;
             padding: 4rem 5%;
-            background: linear-gradient(135deg, #f0f9ff 0%, #fff 100%);
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #fff5f0 100%);
             position: relative;
             z-index: 2;
         }
 
+        /* Animated floating elements in hero */
+        .float-element {
+            position: absolute;
+            border-radius: 20px;
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .float1 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            top: 15%;
+            right: 10%;
+            animation: float1 8s ease-in-out infinite;
+        }
+
+        .float2 {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #ea580c, #fb923c);
+            bottom: 25%;
+            left: 8%;
+            animation: float2 10s ease-in-out infinite;
+        }
+
+        .float3 {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            top: 40%;
+            right: 15%;
+            animation: float3 12s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(30px, -30px) rotate(10deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-25px, 25px) rotate(-8deg); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(20px, 20px) rotate(5deg); }
+        }
+
         .hero h1 {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 800;
             color: #1e40af;
             margin-bottom: 1.5rem;
@@ -163,6 +208,7 @@
             background-clip: text;
             background-size: 200% 200%;
             animation: gradient 5s ease infinite;
+            text-shadow: 0 4px 20px rgba(30, 64, 175, 0.2);
         }
 
         @keyframes gradient {
@@ -172,35 +218,40 @@
         }
 
         .hero p {
-            font-size: 1.5rem;
-            color: #666;
+            font-size: 1.8rem;
+            color: #4b5563;
             margin-bottom: 3rem;
             max-width: 700px;
             opacity: 0;
         }
 
-        /* Decorative shapes in hero */
-        .shape {
-            position: absolute;
-            border-radius: 50%;
-            opacity: 0.1;
-            z-index: -1;
+        /* Search bar style CTA */
+        .search-cta-container {
+            position: relative;
+            max-width: 600px;
+            width: 100%;
+            opacity: 0;
         }
 
-        .shape1 {
-            width: 300px;
-            height: 300px;
-            background: #1e40af;
-            top: 10%;
-            right: 10%;
+        .search-cta {
+            background: white;
+            padding: 1.4rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 3px solid #1e40af;
+            color: #1e40af;
         }
 
-        .shape2 {
-            width: 200px;
-            height: 200px;
-            background: #ea580c;
-            bottom: 20%;
-            left: 5%;
+        .search-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(30, 64, 175, 0.2);
         }
 
         .section {
@@ -209,6 +260,13 @@
             margin: 0 auto;
             position: relative;
             z-index: 2;
+        }
+
+        .section-full {
+            padding: 6rem 5%;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #fff5f0 100%);
         }
 
         .section-title {
@@ -220,21 +278,11 @@
             position: relative;
         }
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #1e40af, #ea580c);
-            border-radius: 2px;
-        }
+
 
         .section-subtitle {
             font-size: 1.2rem;
-            color: #666;
+            color: #4b5563;
             text-align: center;
             margin-bottom: 4rem;
             max-width: 800px;
@@ -294,106 +342,142 @@
         }
 
         .benefit-card p {
-            color: #666;
+            color: #4b5563;
             line-height: 1.6;
         }
 
-        .pricing-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 4rem;
-        }
-
-        .pricing-card {
-            background: white;
-            border-radius: 25px;
-            padding: 3rem;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-            border: 3px solid #e5e7eb;
+        /* Statistics section */
+        .stats-section {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+            padding: 6rem 5%;
             position: relative;
             overflow: hidden;
         }
 
-        .pricing-card::after {
+        .stats-section::before {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(30, 64, 175, 0.1) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.3s;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
         }
 
-        .pricing-card:hover::after {
-            opacity: 1;
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .pricing-card.featured {
-            border-color: #ea580c;
-            transform: scale(1.05);
-            box-shadow: 0 20px 60px rgba(234, 88, 12, 0.2);
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .pricing-card:hover {
-            transform: translateY(-10px) scale(1.02);
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s, background 0.3s;
         }
 
-        .pricing-card.featured:hover {
-            transform: translateY(-10px) scale(1.07);
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
         }
 
-        .price {
+        .stat-number {
             font-size: 3.5rem;
             font-weight: 800;
-            color: #1e40af;
-            margin: 1rem 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        .pricing-card.featured .price {
-            color: #ea580c;
-        }
-
-        .pricing-card h3 {
-            font-size: 1.8rem;
-            color: #333;
             margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 1;
+            color: #fbbf24;
         }
 
-        .features-list {
-            list-style: none;
-            margin: 2rem 0;
-            position: relative;
-            z-index: 1;
-        }
-
-        .features-list li {
-            padding: 0.75rem 0;
-            color: #666;
-            position: relative;
-            padding-left: 2rem;
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-
-        .features-list li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #1e40af;
-            font-weight: bold;
+        .stat-label {
             font-size: 1.2rem;
+            opacity: 0.9;
         }
 
-        .pricing-card.featured .features-list li:before {
+        .stats-section .section-title {
+            color: white;
+        }
+
+        .stats-section .section-title::after {
+            display: none;
+        }
+
+        .stats-section .section-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Culture section */
+        .culture-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .culture-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .culture-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ea580c, #f97316);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .culture-card:hover::after {
+            transform: scaleX(1);
+        }
+
+        .culture-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(234, 88, 12, 0.15);
+        }
+
+        .culture-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .culture-card h3 {
+            font-size: 1.4rem;
             color: #ea580c;
+            margin-bottom: 1rem;
+        }
+
+        .culture-card p {
+            color: #4b5563;
+            line-height: 1.6;
         }
 
         .steps-container {
@@ -402,6 +486,9 @@
             gap: 3rem;
             margin-top: 4rem;
             position: relative;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         /* Connection lines between steps */
@@ -465,7 +552,7 @@
         }
 
         .step-card p {
-            color: #666;
+            color: #4b5563;
             line-height: 1.6;
         }
 
@@ -488,11 +575,6 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
             animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .cta-section h2 {
@@ -540,7 +622,8 @@
 
         .scroll-indicator::before {
             content: '↓';
-            font-size: 2rem;
+            font-size: 3rem;
+            font-weight: bold;
             color: #1e40af;
         }
 
@@ -557,22 +640,22 @@
                 font-size: 2rem;
             }
 
-            .pricing-card.featured {
-                transform: scale(1);
-            }
-
             .steps-container::before {
                 display: none;
             }
 
-            .shape1, .shape2 {
+            .float1, .float2, .float3 {
                 display: none;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="particles" id="particles"></div>
+    <div class="grid-background"></div>
 
     <header id="header">
         <div class="logo">MAGELLAN</div>
@@ -582,11 +665,17 @@
     </header>
 
     <section class="hero">
-        <div class="shape shape1"></div>
-        <div class="shape shape2"></div>
+        <div class="float-element float1"></div>
+        <div class="float-element float2"></div>
+        <div class="float-element float3"></div>
+        
         <h1>Search for your Ideal University</h1>
         <p>Turning moving abroad into a plan, not just a dream.</p>
-        <a href="search.html" class="cta-button orange">Start Your Journey</a>
+        
+        <div class="search-cta-container">
+            <a href="search.html" class="search-cta">Start Your Journey</a>
+        </div>
+        
         <div class="scroll-indicator"></div>
     </section>
 
@@ -613,7 +702,69 @@
         </div>
     </section>
 
-    <section class="section" style="background: linear-gradient(135deg, #fff5f0 0%, #fff 100%);">
+    <section class="stats-section">
+        <h2 class="section-title">The Numbers Speak for Themselves</h2>
+        <p class="section-subtitle">Discover why thousands of students are choosing European universities for their higher education.</p>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">50-80%</div>
+                <div class="stat-label">Lower Tuition Costs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">44</div>
+                <div class="stat-label">Countries to Explore</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">200+</div>
+                <div class="stat-label">Languages Spoken</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">4000+</div>
+                <div class="stat-label">Universities Available</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-full">
+        <h2 class="section-title">Why Culture Matters</h2>
+        <p class="section-subtitle">Choosing the right university isn't just about academics—it's about finding a place where you'll thrive personally and culturally.</p>
+        
+        <div class="culture-grid">
+            <div class="culture-card">
+                <div class="culture-icon">🏛️</div>
+                <h3>Historical Richness</h3>
+                <p>Study in cities with centuries of history, where every street corner tells a story and ancient architecture meets modern innovation.</p>
+            </div>
+            <div class="culture-card">
+                <div class="culture-icon">🍝</div>
+                <h3>Culinary Adventures</h3>
+                <p>From Italian pasta to Spanish tapas, immerse yourself in authentic food cultures that go far beyond what you'll find at home.</p>
+            </div>
+            <div class="culture-card">
+                <div class="culture-icon">🎨</div>
+                <h3>Arts & Entertainment</h3>
+                <p>Access world-class museums, theaters, music festivals, and cultural events that shape global trends and inspire creativity.</p>
+            </div>
+            <div class="culture-card">
+                <div class="culture-icon">🚆</div>
+                <h3>Travel Opportunities</h3>
+                <p>Weekend trips to neighboring countries are easy and affordable. Experience multiple cultures while earning your degree.</p>
+            </div>
+            <div class="culture-card">
+                <div class="culture-icon">👥</div>
+                <h3>Diverse Communities</h3>
+                <p>Meet students from around the world and build lasting friendships with people from different backgrounds and perspectives.</p>
+            </div>
+            <div class="culture-card">
+                <div class="culture-icon">⚽</div>
+                <h3>Sports & Activities</h3>
+                <p>Whether you love football, skiing, cycling, or F1 racing, Europe offers unmatched access to world-class sporting events and activities.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-full" style="background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #ffffff 100%);">
         <h2 class="section-title">How Magellan Works</h2>
         <p class="section-subtitle">We've simplified the process of finding and applying to your dream European university.</p>
         
@@ -631,58 +782,7 @@
             <div class="step-card">
                 <div class="step-number">3</div>
                 <h3>Get Support</h3>
-                <p>Choose a plan that fits your needs and receive personalized guidance throughout your journey from applications to arrival.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section">
-        <h2 class="section-title">Choose Your Plan</h2>
-        <p class="section-subtitle">Select the level of support that's right for your European university journey.</p>
-        
-        <div class="pricing-container">
-            <div class="pricing-card">
-                <h3>Starter</h3>
-                <div class="price">$25</div>
-                <ul class="features-list">
-                    <li>University matching based on interests</li>
-                    <li>City lifestyle overview</li>
-                    <li>Basic cost of living estimates</li>
-                    <li>Program recommendations</li>
-                    <li>Email support</li>
-                </ul>
-                <a href="search.html" class="cta-button">Get Started</a>
-            </div>
-
-            <div class="pricing-card featured">
-                <h3>Professional</h3>
-                <div class="price">$50</div>
-                <ul class="features-list">
-                    <li>Everything in Starter</li>
-                    <li>Detailed visa requirements guide</li>
-                    <li>Application timeline planning</li>
-                    <li>Housing resources and tips</li>
-                    <li>Language requirement analysis</li>
-                    <li>Document checklist</li>
-                    <li>Priority email support</li>
-                </ul>
-                <a href="search.html" class="cta-button orange">Most Popular</a>
-            </div>
-
-            <div class="pricing-card">
-                <h3>Premium</h3>
-                <div class="price">$100</div>
-                <ul class="features-list">
-                    <li>Everything in Professional</li>
-                    <li>One-on-one consultation call</li>
-                    <li>Personalized application strategy</li>
-                    <li>Visa application assistance</li>
-                    <li>Pre-departure preparation guide</li>
-                    <li>Banking and insurance guidance</li>
-                    <li>Scholarship opportunity research</li>
-                    <li>24/7 priority support</li>
-                </ul>
-                <a href="search.html" class="cta-button">Go Premium</a>
+                <p>Receive personalized guidance throughout your journey from applications to arrival, making your transition seamless.</p>
             </div>
         </div>
     </section>
@@ -698,28 +798,6 @@
     </footer>
 
     <script>
-        // Create particles
-        const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            particle.style.left = Math.random() * 100 + '%';
-            particle.style.top = Math.random() * 100 + '%';
-            particlesContainer.appendChild(particle);
-        }
-
-        // Animate particles
-        anime({
-            targets: '.particle',
-            translateY: [0, -1000],
-            translateX: () => anime.random(-100, 100),
-            opacity: [0.3, 0],
-            duration: () => anime.random(3000, 6000),
-            easing: 'linear',
-            loop: true,
-            delay: anime.stagger(100)
-        });
-
         // Animate header on load
         anime({
             targets: '#header',
@@ -728,29 +806,6 @@
             duration: 1000,
             easing: 'easeOutExpo',
             delay: 300
-        });
-
-        // Animate floating shapes
-        anime({
-            targets: '.shape1',
-            translateY: [0, 50],
-            translateX: [0, 30],
-            scale: [1, 1.2],
-            duration: 8000,
-            easing: 'easeInOutSine',
-            loop: true,
-            direction: 'alternate'
-        });
-
-        anime({
-            targets: '.shape2',
-            translateY: [0, -40],
-            translateX: [0, -20],
-            scale: [1, 1.3],
-            duration: 6000,
-            easing: 'easeInOutSine',
-            loop: true,
-            direction: 'alternate'
         });
 
         // Animate hero section on load
@@ -771,7 +826,7 @@
                 easing: 'easeOutExpo'
             }, '-=800')
             .add({
-                targets: '.hero .cta-button',
+                targets: '.search-cta-container',
                 opacity: [0, 1],
                 scale: [0.8, 1],
                 duration: 800,
@@ -800,55 +855,85 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.benefit-card, .step-card').forEach(card => {
+        document.querySelectorAll('.benefit-card, .step-card, .culture-card').forEach(card => {
             card.style.opacity = '0';
             observer.observe(card);
         });
 
-        // Animate pricing cards
-        const pricingObserver = new IntersectionObserver((entries) => {
+        // Animate stat cards
+        const statsObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
                     anime({
                         targets: entry.target,
                         opacity: [0, 1],
-                        translateY: [100, 0],
-                        scale: [0.8, entry.target.classList.contains('featured') ? 1.05 : 1],
-                        duration: 1000,
-                        delay: index * 200,
+                        scale: [0.8, 1],
+                        duration: 800,
+                        delay: index * 150,
                         easing: 'easeOutExpo'
                     });
 
-                    // Animate feature list items
-                    const features = entry.target.querySelectorAll('.features-list li');
-                    anime({
-                        targets: features,
-                        opacity: [0, 1],
-                        translateX: [-20, 0],
-                        duration: 600,
-                        delay: anime.stagger(100, {start: 500}),
-                        easing: 'easeOutExpo'
-                    });
-
-                    pricingObserver.unobserve(entry.target);
+                    // Animate the numbers counting up
+                    const numberEl = entry.target.querySelector('.stat-number');
+                    const text = numberEl.textContent;
+                    const hasPercent = text.includes('%');
+                    const hasPlus = text.includes('+');
+                    const numMatch = text.match(/\d+/);
+                    
+                    if (numMatch) {
+                        const targetNum = parseInt(numMatch[0]);
+                        const obj = {val: 0};
+                        
+                        anime({
+                            targets: obj,
+                            val: targetNum,
+                            duration: 2000,
+                            easing: 'easeOutExpo',
+                            update: function() {
+                                let display = Math.round(obj.val);
+                                if (text.includes('-')) {
+                                    display = display + '-' + (display === 50 ? '80' : '');
+                                }
+                                if (hasPercent) display += '%';
+                                if (hasPlus) display += '+';
+                                numberEl.textContent = display;
+                            }
+                        });
+                    }
+                    
+                    statsObserver.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.pricing-card').forEach(card => {
+        document.querySelectorAll('.stat-card').forEach(card => {
             card.style.opacity = '0';
-            pricingObserver.observe(card);
+            statsObserver.observe(card);
         });
 
-        // Floating animation for benefit icons
+        // Enhanced floating animation for benefit icons
         anime({
             targets: '.benefit-icon',
+            translateY: [-15, 15],
+            rotate: [-8, 8],
+            scale: [1, 1.1],
+            duration: 2500,
+            loop: true,
+            direction: 'alternate',
+            easing: 'easeInOutSine',
+            delay: anime.stagger(200)
+        });
+
+        // Floating animation for culture icons
+        anime({
+            targets: '.culture-icon',
             translateY: [-10, 10],
             rotate: [-5, 5],
             duration: 2000,
             loop: true,
             direction: 'alternate',
-            easing: 'easeInOutSine'
+            easing: 'easeInOutSine',
+            delay: anime.stagger(150)
         });
 
         // Pulse animation for CTA buttons
@@ -882,24 +967,32 @@
             titleObserver.observe(title);
         });
 
-        // Mouse parallax effect for shapes
+        // Subtle parallax effect on floating elements
         document.addEventListener('mousemove', (e) => {
             const mouseX = e.clientX / window.innerWidth;
             const mouseY = e.clientY / window.innerHeight;
 
             anime({
-                targets: '.shape1',
-                translateX: mouseX * 50,
-                translateY: mouseY * 50,
-                duration: 1000,
+                targets: '.float1',
+                translateX: mouseX * 30,
+                translateY: mouseY * 30,
+                duration: 1500,
                 easing: 'easeOutExpo'
             });
 
             anime({
-                targets: '.shape2',
-                translateX: mouseX * -30,
-                translateY: mouseY * -30,
-                duration: 1000,
+                targets: '.float2',
+                translateX: mouseX * -25,
+                translateY: mouseY * -25,
+                duration: 1500,
+                easing: 'easeOutExpo'
+            });
+
+            anime({
+                targets: '.float3',
+                translateX: mouseX * 20,
+                translateY: mouseY * 20,
+                duration: 1500,
                 easing: 'easeOutExpo'
             });
         });
