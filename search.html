@@ -39,7 +39,45 @@
             text-decoration: none;
         }
 
+        .page-wrapper {
+            display: flex;
+            max-width: 1800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Side Ad Bars */
+        .side-ad {
+            width: 160px;
+            position: sticky;
+            top: 100px;
+            height: 600px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #000;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .side-ad.left {
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        .side-ad.right {
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
         .search-container {
+            flex: 1;
             max-width: 900px;
             margin: 4rem auto;
             padding: 0 2rem;
@@ -62,7 +100,30 @@
 
         .search-header p {
             font-size: 1.2rem;
-            color: #666;
+            color: #4b5563;
+        }
+
+        /* Sponsored Ad Banner */
+        .sponsored-ad {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border: 3px dashed #b45309;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .sponsored-ad h3 {
+            font-size: 1.5rem;
+            color: #78350f;
+            margin-bottom: 0.5rem;
+        }
+
+        .sponsored-ad p {
+            color: #92400e;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
         .search-box {
@@ -72,8 +133,56 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
         }
 
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .step.active .step-number {
+            background: #1e40af;
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #10b981;
+            color: white;
+        }
+
+        .step-label {
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .step.active .step-label {
+            color: #1e40af;
+        }
+
         .search-section {
             margin-bottom: 2.5rem;
+        }
+
+        .search-section.hidden {
+            display: none;
         }
 
         .search-section h3 {
@@ -141,6 +250,24 @@
             transform: translateY(-1px);
         }
 
+        .search-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, #6b7280, #9ca3af);
+            margin-right: 1rem;
+            width: auto;
+            padding: 1.2rem 3rem;
+            display: inline-block;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+        }
+
         .results-container {
             margin-top: 3rem;
             opacity: 0;
@@ -177,7 +304,7 @@
         }
 
         .result-card p {
-            color: #666;
+            color: #4b5563;
             line-height: 1.6;
             margin-bottom: 1rem;
         }
@@ -196,6 +323,12 @@
             font-size: 0.85rem;
         }
 
+        @media (max-width: 1400px) {
+            .side-ad {
+                display: none;
+            }
+        }
+
         @media (max-width: 768px) {
             .search-header h1 {
                 font-size: 2rem;
@@ -208,6 +341,18 @@
             .search-box {
                 padding: 2rem 1.5rem;
             }
+
+            .step-label {
+                display: none;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .back-button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -216,74 +361,160 @@
         <a href="index.html" class="logo">MAGELLAN</a>
     </header>
 
-    <div class="search-container">
-        <div class="search-header">
-            <h1>Find Your Perfect University</h1>
-            <p>Select your interests and discover European universities that match your lifestyle</p>
+    <div class="page-wrapper">
+        <div class="side-ad left">
+            <div>PLACEHOLDER<br>AD<br>SPACE</div>
         </div>
 
-        <div class="search-box">
-            <div class="search-section">
-                <h3>What are your interests?</h3>
-                <p style="color: #666; margin-bottom: 1rem;">Select all that apply</p>
-                <div class="interest-grid">
-                    <div class="interest-tag" data-interest="food">
-                        <span class="interest-icon">🍕</span>
-                        Food Culture
+        <div class="search-container">
+            <div class="search-header">
+                <h1>Find Your Perfect University</h1>
+                <p>Select your interests and major to discover European universities</p>
+            </div>
+
+            <div class="sponsored-ad">
+                <h3>Premium Advertising Space Available</h3>
+                <p>Contact us to feature your brand here</p>
+            </div>
+
+            <div class="search-box">
+                <div class="step-indicator">
+                    <div class="step active" id="step1-indicator">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Interests</div>
                     </div>
-                    <div class="interest-tag" data-interest="f1">
-                        <span class="interest-icon">🏎️</span>
-                        F1 Racing
+                    <div class="step" id="step2-indicator">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Major</div>
                     </div>
-                    <div class="interest-tag" data-interest="party">
-                        <span class="interest-icon">🎉</span>
-                        Nightlife
+                </div>
+
+                <!-- Step 1: Interests -->
+                <div class="search-section" id="step1">
+                    <h3>What are your interests?</h3>
+                    <p style="color: #4b5563; margin-bottom: 1rem;">Select all that apply</p>
+                    <div class="interest-grid">
+                        <div class="interest-tag" data-interest="food">
+                            <span class="interest-icon">🍕</span>
+                            Food Culture
+                        </div>
+                        <div class="interest-tag" data-interest="f1">
+                            <span class="interest-icon">🏎️</span>
+                            F1 Racing
+                        </div>
+                        <div class="interest-tag" data-interest="party">
+                            <span class="interest-icon">🎉</span>
+                            Nightlife
+                        </div>
+                        <div class="interest-tag" data-interest="art">
+                            <span class="interest-icon">🎨</span>
+                            Art & Museums
+                        </div>
+                        <div class="interest-tag" data-interest="nature">
+                            <span class="interest-icon">🏔️</span>
+                            Nature & Hiking
+                        </div>
+                        <div class="interest-tag" data-interest="history">
+                            <span class="interest-icon">🏛️</span>
+                            History
+                        </div>
+                        <div class="interest-tag" data-interest="tech">
+                            <span class="interest-icon">💻</span>
+                            Tech Scene
+                        </div>
+                        <div class="interest-tag" data-interest="sports">
+                            <span class="interest-icon">⚽</span>
+                            Sports
+                        </div>
+                        <div class="interest-tag" data-interest="music">
+                            <span class="interest-icon">🎵</span>
+                            Music & Festivals
+                        </div>
+                        <div class="interest-tag" data-interest="beach">
+                            <span class="interest-icon">🏖️</span>
+                            Beach & Coast
+                        </div>
+                        <div class="interest-tag" data-interest="fashion">
+                            <span class="interest-icon">👗</span>
+                            Fashion
+                        </div>
+                        <div class="interest-tag" data-interest="cafe">
+                            <span class="interest-icon">☕</span>
+                            Café Culture
+                        </div>
                     </div>
-                    <div class="interest-tag" data-interest="art">
-                        <span class="interest-icon">🎨</span>
-                        Art & Museums
+                    <button class="search-button" onclick="goToStep2()">Next: Choose Your Major</button>
+                </div>
+
+                <!-- Step 2: Major -->
+                <div class="search-section hidden" id="step2">
+                    <h3>What do you want to study?</h3>
+                    <p style="color: #4b5563; margin-bottom: 1rem;">Select your intended major</p>
+                    <div class="interest-grid">
+                        <div class="interest-tag" data-major="business">
+                            <span class="interest-icon">💼</span>
+                            Business
+                        </div>
+                        <div class="interest-tag" data-major="engineering">
+                            <span class="interest-icon">⚙️</span>
+                            Engineering
+                        </div>
+                        <div class="interest-tag" data-major="computer-science">
+                            <span class="interest-icon">💻</span>
+                            Computer Science
+                        </div>
+                        <div class="interest-tag" data-major="medicine">
+                            <span class="interest-icon">🏥</span>
+                            Medicine
+                        </div>
+                        <div class="interest-tag" data-major="arts">
+                            <span class="interest-icon">🎭</span>
+                            Arts & Humanities
+                        </div>
+                        <div class="interest-tag" data-major="law">
+                            <span class="interest-icon">⚖️</span>
+                            Law
+                        </div>
+                        <div class="interest-tag" data-major="economics">
+                            <span class="interest-icon">📊</span>
+                            Economics
+                        </div>
+                        <div class="interest-tag" data-major="architecture">
+                            <span class="interest-icon">🏗️</span>
+                            Architecture
+                        </div>
+                        <div class="interest-tag" data-major="science">
+                            <span class="interest-icon">🔬</span>
+                            Natural Sciences
+                        </div>
+                        <div class="interest-tag" data-major="psychology">
+                            <span class="interest-icon">🧠</span>
+                            Psychology
+                        </div>
+                        <div class="interest-tag" data-major="communications">
+                            <span class="interest-icon">📱</span>
+                            Communications
+                        </div>
+                        <div class="interest-tag" data-major="hospitality">
+                            <span class="interest-icon">🏨</span>
+                            Hospitality
+                        </div>
                     </div>
-                    <div class="interest-tag" data-interest="nature">
-                        <span class="interest-icon">🏔️</span>
-                        Nature & Hiking
-                    </div>
-                    <div class="interest-tag" data-interest="history">
-                        <span class="interest-icon">🏛️</span>
-                        History
-                    </div>
-                    <div class="interest-tag" data-interest="tech">
-                        <span class="interest-icon">💻</span>
-                        Tech Scene
-                    </div>
-                    <div class="interest-tag" data-interest="sports">
-                        <span class="interest-icon">⚽</span>
-                        Sports
-                    </div>
-                    <div class="interest-tag" data-interest="music">
-                        <span class="interest-icon">🎵</span>
-                        Music & Festivals
-                    </div>
-                    <div class="interest-tag" data-interest="beach">
-                        <span class="interest-icon">🏖️</span>
-                        Beach & Coast
-                    </div>
-                    <div class="interest-tag" data-interest="fashion">
-                        <span class="interest-icon">👗</span>
-                        Fashion
-                    </div>
-                    <div class="interest-tag" data-interest="cafe">
-                        <span class="interest-icon">☕</span>
-                        Café Culture
+                    <div class="button-group">
+                        <button class="search-button back-button" onclick="goToStep1()">Back</button>
+                        <button class="search-button" onclick="searchUniversities()">Find My Universities</button>
                     </div>
                 </div>
             </div>
 
-            <button class="search-button" onclick="searchUniversities()">Find My Universities</button>
+            <div class="results-container" id="results">
+                <h3 style="color: #1e40af; font-size: 1.8rem; margin-bottom: 1.5rem;">Your Matches</h3>
+                <div id="results-list"></div>
+            </div>
         </div>
 
-        <div class="results-container" id="results">
-            <h3 style="color: #1e40af; font-size: 1.8rem; margin-bottom: 1.5rem;">Your Matches</h3>
-            <div id="results-list"></div>
+        <div class="side-ad right">
+            <div>PLACEHOLDER<br>AD<br>SPACE</div>
         </div>
     </div>
 
@@ -307,6 +538,15 @@
         });
 
         anime({
+            targets: '.sponsored-ad',
+            opacity: [0, 1],
+            scale: [0.9, 1],
+            duration: 800,
+            delay: 300,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
             targets: '.search-box',
             opacity: [0, 1],
             translateY: [50, 0],
@@ -324,10 +564,21 @@
             easing: 'easeOutExpo'
         });
 
-        // Handle interest selection
+        anime({
+            targets: '.side-ad',
+            opacity: [0, 1],
+            scale: [0.8, 1],
+            duration: 800,
+            delay: 500,
+            easing: 'easeOutExpo'
+        });
+
+        // State management
         const selectedInterests = new Set();
-        
-        document.querySelectorAll('.interest-tag').forEach(tag => {
+        let selectedMajor = null;
+
+        // Handle interest selection (Step 1)
+        document.querySelectorAll('[data-interest]').forEach(tag => {
             tag.addEventListener('click', function() {
                 const interest = this.dataset.interest;
                 
@@ -355,74 +606,212 @@
             });
         });
 
-        // Sample university data
-        const universities = [
-            {
-                name: "University of Barcelona",
-                location: "Barcelona, Spain",
-                description: "Located in one of Europe's most vibrant cities, perfect for food lovers, beach enthusiasts, and those who love art and culture.",
-                tags: ["food", "beach", "art", "party"],
-                icon: "🇪🇸"
-            },
-            {
-                name: "Technical University of Munich",
-                location: "Munich, Germany",
-                description: "World-class engineering programs in a city known for its tech scene, rich history, and proximity to the Alps.",
-                tags: ["tech", "history", "nature", "sports"],
-                icon: "🇩🇪"
-            },
-            {
-                name: "University of Amsterdam",
-                location: "Amsterdam, Netherlands",
-                description: "Study in the heart of a progressive city with amazing café culture, museums, and cycling everywhere.",
-                tags: ["cafe", "art", "history", "party"],
-                icon: "🇳🇱"
-            },
-            {
-                name: "Bocconi University",
-                location: "Milan, Italy",
-                description: "Premier business school in the global fashion capital, surrounded by incredible food and culture.",
-                tags: ["fashion", "food", "art", "cafe"],
-                icon: "🇮🇹"
-            },
-            {
-                name: "École Polytechnique Fédérale",
-                location: "Lausanne, Switzerland",
-                description: "Top-tier STEM programs with stunning mountain views and access to world-class skiing and hiking.",
-                tags: ["tech", "nature", "sports"],
-                icon: "🇨🇭"
+        // Handle major selection (Step 2)
+        document.querySelectorAll('[data-major]').forEach(tag => {
+            tag.addEventListener('click', function() {
+                // Remove previous selection
+                document.querySelectorAll('[data-major]').forEach(t => t.classList.remove('selected'));
+                
+                // Add new selection
+                this.classList.add('selected');
+                selectedMajor = this.dataset.major;
+                
+                anime({
+                    targets: this,
+                    scale: [1, 1.1, 1],
+                    duration: 500,
+                    easing: 'easeOutElastic(1, .6)'
+                });
+            });
+        });
+
+        function goToStep2() {
+            if (selectedInterests.size === 0) {
+                alert('Please select at least one interest!');
+                return;
             }
+
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.remove('hidden');
+            document.getElementById('step1-indicator').classList.remove('active');
+            document.getElementById('step1-indicator').classList.add('completed');
+            document.getElementById('step2-indicator').classList.add('active');
+
+            anime({
+                targets: '#step2',
+                opacity: [0, 1],
+                translateX: [50, 0],
+                duration: 600,
+                easing: 'easeOutExpo'
+            });
+
+            anime({
+                targets: '#step2 .interest-tag',
+                opacity: [0, 1],
+                scale: [0.8, 1],
+                duration: 600,
+                delay: anime.stagger(50),
+                easing: 'easeOutExpo'
+            });
+        }
+
+        function goToStep1() {
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('step2-indicator').classList.remove('active');
+            document.getElementById('step1-indicator').classList.remove('completed');
+            document.getElementById('step1-indicator').classList.add('active');
+
+            anime({
+                targets: '#step1',
+                opacity: [0, 1],
+                translateX: [-50, 0],
+                duration: 600,
+                easing: 'easeOutExpo'
+            });
+        }
+
+        // Expanded university database
+        const universities = [
+            // Spain
+            {name: "University of Barcelona", location: "Barcelona, Spain", description: "Located in one of Europe's most vibrant cities, perfect for food lovers, beach enthusiasts, and those who love art and culture.", tags: ["food", "beach", "art", "party"], majors: ["business", "medicine", "arts", "science"], icon: "🇪🇸"},
+            {name: "Complutense University of Madrid", location: "Madrid, Spain", description: "Spain's largest university in the heart of Madrid, known for history, museums, and vibrant nightlife.", tags: ["history", "art", "party", "food"], majors: ["law", "arts", "business", "medicine"], icon: "🇪🇸"},
+            {name: "IE Business School", location: "Madrid, Spain", description: "Top-ranked business school in Spain's capital with strong entrepreneurship focus.", tags: ["business", "tech", "cafe"], majors: ["business", "economics"], icon: "🇪🇸"},
+            
+            // Germany
+            {name: "Technical University of Munich", location: "Munich, Germany", description: "World-class engineering programs in a city known for its tech scene, rich history, and proximity to the Alps.", tags: ["tech", "history", "nature", "sports"], majors: ["engineering", "computer-science", "science"], icon: "🇩🇪"},
+            {name: "Heidelberg University", location: "Heidelberg, Germany", description: "Germany's oldest university in a picturesque town, excellent for sciences and medicine.", tags: ["history", "nature", "cafe"], majors: ["medicine", "science", "law"], icon: "🇩🇪"},
+            {name: "Humboldt University", location: "Berlin, Germany", description: "Prestigious university in Europe's coolest capital with amazing nightlife and arts scene.", tags: ["party", "art", "music", "history"], majors: ["arts", "psychology", "economics"], icon: "🇩🇪"},
+            {name: "RWTH Aachen", location: "Aachen, Germany", description: "Leading technical university near Belgian and Dutch borders.", tags: ["tech", "engineering"], majors: ["engineering", "computer-science", "architecture"], icon: "🇩🇪"},
+
+            // Netherlands
+            {name: "University of Amsterdam", location: "Amsterdam, Netherlands", description: "Study in the heart of a progressive city with amazing café culture, museums, and cycling everywhere.", tags: ["cafe", "art", "history", "party"], majors: ["business", "arts", "psychology", "economics"], icon: "🇳🇱"},
+            {name: "Delft University of Technology", location: "Delft, Netherlands", description: "Top engineering school in charming Dutch city with great cycling culture.", tags: ["tech", "nature", "cafe"], majors: ["engineering", "architecture", "computer-science"], icon: "🇳🇱"},
+            {name: "Erasmus University", location: "Rotterdam, Netherlands", description: "Modern university in Europe's largest port city, strong in business and economics.", tags: ["business", "tech", "party"], majors: ["business", "economics", "medicine"], icon: "🇳🇱"},
+
+            // Italy
+            {name: "Bocconi University", location: "Milan, Italy", description: "Premier business school in the global fashion capital, surrounded by incredible food and culture.", tags: ["fashion", "food", "art", "cafe"], majors: ["business", "economics"], icon: "🇮🇹"},
+            {name: "University of Bologna", location: "Bologna, Italy", description: "World's oldest university in Italy's food capital with incredible culinary traditions.", tags: ["food", "history", "art"], majors: ["law", "arts", "medicine", "science"], icon: "🇮🇹"},
+            {name: "Sapienza University", location: "Rome, Italy", description: "Study in the Eternal City surrounded by ancient history and amazing food.", tags: ["history", "art", "food", "cafe"], majors: ["architecture", "arts", "law", "engineering"], icon: "🇮🇹"},
+            {name: "Politecnico di Milano", location: "Milan, Italy", description: "Leading technical university in fashion and design capital of the world.", tags: ["fashion", "tech", "art", "food"], majors: ["engineering", "architecture", "computer-science"], icon: "🇮🇹"},
+
+            // Switzerland
+            {name: "ETH Zurich", location: "Zurich, Switzerland", description: "World-renowned technical university with stunning mountain access.", tags: ["tech", "nature", "sports"], majors: ["engineering", "computer-science", "science", "architecture"], icon: "🇨🇭"},
+            {name: "École Polytechnique Fédérale", location: "Lausanne, Switzerland", description: "Top-tier STEM programs with stunning mountain views and world-class skiing.", tags: ["tech", "nature", "sports"], majors: ["engineering", "computer-science", "science"], icon: "🇨🇭"},
+            {name: "University of Geneva", location: "Geneva, Switzerland", description: "International university in a global diplomatic hub near beautiful lakes and Alps.", tags: ["nature", "cafe", "history"], majors: ["law", "economics", "science", "medicine"], icon: "🇨🇭"},
+
+            // France
+            {name: "Sciences Po", location: "Paris, France", description: "Elite political science school in the City of Light with incredible art, food, and culture.", tags: ["fashion", "food", "art", "cafe", "history"], majors: ["economics", "law", "communications", "arts"], icon: "🇫🇷"},
+            {name: "Sorbonne University", location: "Paris, France", description: "Historic university in Paris with world-class arts, humanities, and sciences.", tags: ["art", "history", "fashion", "cafe"], majors: ["arts", "medicine", "science", "law"], icon: "🇫🇷"},
+            {name: "HEC Paris", location: "Paris, France", description: "Top European business school near Paris with excellent global reputation.", tags: ["business", "fashion", "food"], majors: ["business", "economics"], icon: "🇫🇷"},
+
+            // UK
+            {name: "University of Edinburgh", location: "Edinburgh, Scotland", description: "Historic university in stunning Scottish capital with great festival culture.", tags: ["history", "music", "art", "nature"], majors: ["medicine", "law", "arts", "science", "business"], icon: "🇬🇧"},
+            {name: "Imperial College London", location: "London, UK", description: "World-leading STEM university in one of the world's most diverse cities.", tags: ["tech", "fashion", "music", "party"], majors: ["engineering", "computer-science", "medicine", "science"], icon: "🇬🇧"},
+            {name: "London School of Economics", location: "London, UK", description: "Premier social sciences university in the heart of global finance.", tags: ["business", "cafe", "music", "fashion"], majors: ["economics", "law", "business", "communications"], icon: "🇬🇧"},
+
+            // Austria
+            {name: "University of Vienna", location: "Vienna, Austria", description: "Study in Europe's most liveable city with incredible café culture and classical music.", tags: ["cafe", "music", "art", "history"], majors: ["arts", "music", "law", "medicine", "psychology"], icon: "🇦🇹"},
+            {name: "Vienna University of Technology", location: "Vienna, Austria", description: "Leading technical university in beautiful, cultural city near the Alps.", tags: ["tech", "music", "nature", "cafe"], majors: ["engineering", "computer-science", "architecture"], icon: "🇦🇹"},
+
+            // Belgium
+            {name: "KU Leuven", location: "Leuven, Belgium", description: "Historic university in charming Belgian town with great beer culture.", tags: ["history", "food", "cafe"], majors: ["medicine", "engineering", "business", "law"], icon: "🇧🇪"},
+            {name: "Université Libre de Bruxelles", location: "Brussels, Belgium", description: "International university in EU capital with multicultural environment.", tags: ["food", "history", "cafe"], majors: ["law", "economics", "medicine", "arts"], icon: "🇧🇪"},
+
+            // Sweden
+            {name: "Lund University", location: "Lund, Sweden", description: "Top Nordic university with excellent engineering and design programs.", tags: ["tech", "nature", "cafe"], majors: ["engineering", "computer-science", "medicine", "science"], icon: "🇸🇪"},
+            {name: "KTH Royal Institute", location: "Stockholm, Sweden", description: "Leading technical university in beautiful Stockholm archipelago.", tags: ["tech", "nature", "cafe"], majors: ["engineering", "computer-science", "architecture"], icon: "🇸🇪"},
+
+            // Denmark
+            {name: "University of Copenhagen", location: "Copenhagen, Denmark", description: "Scandinavia's top university in the world's happiest city with great cycling culture.", tags: ["cafe", "nature", "food"], majors: ["medicine", "science", "business", "law"], icon: "🇩🇰"},
+            
+            // Portugal
+            {name: "University of Lisbon", location: "Lisbon, Portugal", description: "Study in Europe's sunniest capital with beautiful beaches and vibrant nightlife.", tags: ["beach", "party", "food", "music"], majors: ["business", "arts", "engineering", "medicine"], icon: "🇵🇹"},
+            {name: "University of Porto", location: "Porto, Portugal", description: "Historic university in charming coastal city famous for port wine.", tags: ["beach", "food", "history", "cafe"], majors: ["engineering", "medicine", "arts", "business"], icon: "🇵🇹"},
+
+            // Ireland
+            {name: "Trinity College Dublin", location: "Dublin, Ireland", description: "Ireland's oldest university in a vibrant city with great pub culture and music scene.", tags: ["music", "party", "history", "cafe"], majors: ["business", "computer-science", "law", "medicine"], icon: "🇮🇪"},
+
+            // Norway
+            {name: "University of Oslo", location: "Oslo, Norway", description: "Excellent university in beautiful city surrounded by fjords and nature.", tags: ["nature", "sports", "cafe"], majors: ["science", "medicine", "law", "economics"], icon: "🇳🇴"},
+
+            // Czech Republic
+            {name: "Charles University", location: "Prague, Czech Republic", description: "Historic university in one of Europe's most beautiful and affordable cities.", tags: ["history", "party", "art", "food"], majors: ["medicine", "law", "arts", "science"], icon: "🇨🇿"},
+
+            // Poland
+            {name: "Jagiellonian University", location: "Krakow, Poland", description: "One of Europe's oldest universities in charming medieval city.", tags: ["history", "art", "food", "party"], majors: ["medicine", "law", "arts", "business"], icon: "🇵🇱"},
+
+            // Greece
+            {name: "National Technical University", location: "Athens, Greece", description: "Leading Greek university in historic capital with amazing Mediterranean climate.", tags: ["history", "beach", "food", "sun"], majors: ["engineering", "architecture", "science"], icon: "🇬🇷"},
         ];
 
         function searchUniversities() {
-            if (selectedInterests.size === 0) {
-                alert('Please select at least one interest!');
+            if (!selectedMajor) {
+                alert('Please select a major!');
                 return;
             }
 
             const resultsContainer = document.getElementById('results');
             const resultsList = document.getElementById('results-list');
             
-            // Filter universities based on interests
-            const matches = universities.filter(uni => 
+            // First, try to find perfect matches (both interests AND major)
+            let matches = universities.filter(uni => 
+                uni.majors.includes(selectedMajor) &&
                 uni.tags.some(tag => selectedInterests.has(tag))
-            ).sort((a, b) => {
+            ).map(uni => ({...uni, matchType: 'perfect'}));
+
+            // If no perfect matches, find universities that match major only
+            if (matches.length === 0) {
+                matches = universities.filter(uni => 
+                    uni.majors.includes(selectedMajor)
+                ).map(uni => ({...uni, matchType: 'major'}));
+            }
+
+            // If still no matches, find universities that match interests only
+            if (matches.length === 0) {
+                matches = universities.filter(uni => 
+                    uni.tags.some(tag => selectedInterests.has(tag))
+                ).map(uni => ({...uni, matchType: 'interest'}));
+            }
+
+            // If STILL no matches, show all universities
+            if (matches.length === 0) {
+                matches = universities.slice(0, 10).map(uni => ({...uni, matchType: 'general'}));
+            }
+
+            // Sort by number of interest matches
+            matches.sort((a, b) => {
                 const aMatches = a.tags.filter(tag => selectedInterests.has(tag)).length;
                 const bMatches = b.tags.filter(tag => selectedInterests.has(tag)).length;
                 return bMatches - aMatches;
             });
 
-            // Display results
-            resultsList.innerHTML = matches.map(uni => `
-                <div class="result-card">
-                    <h4>${uni.icon} ${uni.name}</h4>
-                    <div class="location">📍 ${uni.location}</div>
-                    <p>${uni.description}</p>
-                    <div class="result-tags">
-                        ${uni.tags.map(tag => `<span class="result-tag">${tag}</span>`).join('')}
+            // Display results with match type indicator
+            resultsList.innerHTML = matches.map(uni => {
+                let matchBadge = '';
+                if (uni.matchType === 'perfect') {
+                    matchBadge = '<span class="result-tag" style="background: #10b981; color: white;">Perfect Match</span>';
+                } else if (uni.matchType === 'major') {
+                    matchBadge = '<span class="result-tag" style="background: #3b82f6; color: white;">Major Match</span>';
+                } else if (uni.matchType === 'interest') {
+                    matchBadge = '<span class="result-tag" style="background: #f59e0b; color: white;">Interest Match</span>';
+                } else {
+                    matchBadge = '<span class="result-tag" style="background: #6b7280; color: white;">Suggested</span>';
+                }
+
+                return `
+                    <div class="result-card">
+                        <h4>${uni.icon} ${uni.name}</h4>
+                        <div class="location">📍 ${uni.location}</div>
+                        <p>${uni.description}</p>
+                        <div class="result-tags">
+                            ${matchBadge}
+                            ${uni.tags.map(tag => `<span class="result-tag">${tag}</span>`).join('')}
+                            <span class="result-tag" style="background: #fef3c7; color: #92400e;">Major: ${selectedMajor}</span>
+                        </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
 
             // Show results with animation
             resultsContainer.style.display = 'block';
