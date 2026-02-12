@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Forum - Magellan</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #fff5f0 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Grid background - same as homepage */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(30, 64, 175, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(30, 64, 175, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header - same as homepage */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            letter-spacing: 2px;
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1e40af, #ea580c);
+            transition: width 0.3s;
+        }
+
+        .logo:hover::after {
+            width: 100%;
+        }
+
+        nav a {
+            margin-left: 2rem;
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #1e40af;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.3);
+        }
+
+        /* Main content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 120px 5% 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            opacity: 0;
+        }
+
+        .page-subtitle {
+            font-size: 1.3rem;
+            color: #4b5563;
+            opacity: 0;
+        }
+
+        /* Discussion cards grid */
+        .discussions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .discussion-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+        }
+
+        .discussion-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(30, 64, 175, 0.05), transparent);
+            transition: left 0.5s;
+        }
+
+        .discussion-card:hover::before {
+            left: 100%;
+        }
+
+        .discussion-card:hover {
+            transform: translateY(-10px) rotate(1deg);
+            box-shadow: 0 20px 50px rgba(30, 64, 175, 0.15);
+            border-color: #1e40af;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            gap: 1rem;
+        }
+
+        .card-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .university-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: fit-content;
+        }
+
+        .time-ago {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .hearts-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #fef3f2;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            white-space: nowrap;
+        }
+
+        .heart-icon {
+            color: #ea580c;
+            font-size: 1.2rem;
+        }
+
+        .hearts-count {
+            color: #ea580c;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .discussion-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .discussion-preview {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 2px solid #f3f4f6;
+        }
+
+        .topic-badge {
+            background: #f0f9ff;
+            color: #1e40af;
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .replies-count {
+            color: #6b7280;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .replies-icon {
+            font-size: 1.1rem;
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 30px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 3rem;
+            position: relative;
+            box-shadow: 0 25px 100px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            opacity: 0;
+        }
+
+        .modal-content.active {
+            animation: modalIn 0.4s ease forwards;
+        }
+
+        @keyframes modalIn {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: #f3f4f6;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: #6b7280;
+        }
+
+        .close-modal:hover {
+            background: #1e40af;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            margin-bottom: 2rem;
+            padding-right: 3rem;
+        }
+
+        .modal-university {
+            display: inline-block;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .modal-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .modal-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        .modal-hearts {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #fef3f2;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+        }
+
+        .modal-hearts .heart-icon {
+            font-size: 1.3rem;
+        }
+
+        .modal-hearts .hearts-count {
+            font-size: 1.2rem;
+        }
+
+        .modal-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #374151;
+            margin-bottom: 2.5rem;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            padding-top: 2rem;
+            border-top: 2px solid #f3f4f6;
+        }
+
+        .reply-button {
+            flex: 1;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reply-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.3);
+        }
+
+        .heart-button {
+            background: #fef3f2;
+            color: #ea580c;
+            border: 2px solid #ea580c;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .heart-button:hover {
+            background: #ea580c;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(234, 88, 12, 0.3);
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .discussions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                padding: 2rem;
+                margin: 1rem;
+            }
+
+            .modal-title {
+                font-size: 1.7rem;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+        }
+
+        /* Empty state (if needed later) */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #9ca3af;
+        }
+
+        /* Loading animation */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            font-size: 1.2rem;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+
+    <header>
+        <a href="index.html" class="logo">MAGELLAN</a>
+        <nav>
+            <a href="search.html">Find Universities</a>
+            <a href="forum.html" class="cta-button">Community Forum</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1 class="page-title">Community Forum</h1>
+            <p class="page-subtitle">Connect with students, ask questions, and share experiences about European universities</p>
+        </div>
+
+        <div class="discussions-grid" id="discussionsGrid">
+            <!-- Cards will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- Modal overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content" id="modalContent">
+            <button class="close-modal" id="closeModal">×</button>
+            <div id="modalBody">
+                <!-- Modal content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Forum data embedded in the page
+        const discussions = [
+  {
+    "id": 1,
+    "title": "Is IE Madrid actually worth the price tag?",
+    "body": "I got accepted to IE Business School and honestly the tuition is wild. My parents are willing to pay but I'm having second thoughts. Anyone here actually go there? Is the network and job placement really that good or is it just hype?",
+    "university": "IE Madrid",
+    "country": "Spain",
+    "topic": "Admissions",
+    "hearts": 156,
+    "replies": 23,
+    "timeAgo": "3 hours ago"
+  },
+  {
+    "id": 2,
+    "title": "Cheapest way to find housing in Barcelona?",
+    "body": "Moving to Barcelona for UPF in September and the housing market looks insane rn. Everyone's telling me different things about whether to book now or wait. What did you guys do? Also is living with randos from Facebook groups sketchy or nah",
+    "university": "Pompeu Fabra University",
+    "country": "Spain",
+    "topic": "Housing",
+    "hearts": 89,
+    "replies": 31,
+    "timeAgo": "5 hours ago"
+  },
+  {
+    "id": 3,
+    "title": "HEC Paris vs ESADE - help me decide??",
+    "body": "Got into both programs (MiM) and genuinely can't choose. HEC has the prestige but ESADE has better vibes from what I've heard. Planning to work in consulting after so idk if the Paris location matters more. Thoughts?",
+    "university": "HEC Paris",
+    "country": "France",
+    "topic": "Admissions",
+    "hearts": 203,
+    "replies": 47,
+    "timeAgo": "8 hours ago"
+  },
+  {
+    "id": 4,
+    "title": "Sciences Po acceptance rate - is it actually this competitive?",
+    "body": "Saw somewhere that Sciences Po has like a 7% acceptance rate for international students. That seems crazy low? Can anyone confirm if this is real or if I'm looking at old data",
+    "university": "Sciences Po",
+    "country": "France",
+    "topic": "Admissions",
+    "hearts": 67,
+    "replies": 18,
+    "timeAgo": "12 hours ago"
+  },
+  {
+    "id": 5,
+    "title": "Student visa appointments are fully booked wtf",
+    "body": "I need to get my student visa for France and the earliest appointment at the consulate is in like 6 weeks. My program starts in 10 weeks. Am I cooked or is there a way to expedite this? Getting stressed",
+    "university": "General France",
+    "country": "France",
+    "topic": "Visa",
+    "hearts": 124,
+    "replies": 29,
+    "timeAgo": "1 day ago"
+  },
+  {
+    "id": 6,
+    "title": "ESADE party scene?",
+    "body": "Committed to ESADE for fall and want to know what the social life is actually like. Is it all networking events and suit-wearing or do people actually go out and have fun lol",
+    "university": "ESADE Barcelona",
+    "country": "Spain",
+    "topic": "Student Life",
+    "hearts": 178,
+    "replies": 52,
+    "timeAgo": "1 day ago"
+  },
+  {
+    "id": 7,
+    "title": "Can I survive in Paris with just English?",
+    "body": "Got into a masters program at Paris-Dauphine and my French is like... high school level at best. Will I be able to get by or should I actually grind Duolingo before I get there? Real talk only pls",
+    "university": "Paris-Dauphine",
+    "country": "France",
+    "topic": "Student Life",
+    "hearts": 92,
+    "replies": 38,
+    "timeAgo": "2 days ago"
+  },
+  {
+    "id": 8,
+    "title": "IE vs ESADE for finance career in London",
+    "body": "Want to end up at a bulge bracket in London after graduation. Which one has better recruitment and alumni network in UK? Both programs seem solid but need to make a call soon",
+    "university": "IE Madrid",
+    "country": "Spain",
+    "topic": "Careers",
+    "hearts": 145,
+    "replies": 26,
+    "timeAgo": "2 days ago"
+  },
+  {
+    "id": 9,
+    "title": "How cold does Paris get in winter?",
+    "body": "This might sound dumb but I'm from California and have never lived anywhere with actual winter. Do I need to buy like a Canada Goose jacket or is that overkill for Paris? What do students actually wear there",
+    "university": "General France",
+    "country": "France",
+    "topic": "Student Life",
+    "hearts": 34,
+    "replies": 15,
+    "timeAgo": "3 days ago"
+  },
+  {
+    "id": 10,
+    "title": "Scholarship chances at ESADE with 3.4 GPA?",
+    "body": "My GPA isn't amazing (3.4 from a state school) but I have solid work experience and good GMAT. Anyone know if ESADE gives merit scholarships to people without perfect stats? Trying to make this financially work",
+    "university": "ESADE Barcelona",
+    "country": "Spain",
+    "topic": "Financial",
+    "hearts": 71,
+    "replies": 12,
+    "timeAgo": "4 days ago"
+  },
+  {
+    "id": 11,
+    "title": "Madrid vs Barcelona for nightlife",
+    "body": "Deciding between programs in both cities and honestly the social scene matters to me. I've heard Madrid goes harder but Barcelona has better clubs? What's the actual vibe difference for students",
+    "university": "General Spain",
+    "country": "Spain",
+    "topic": "Student Life",
+    "hearts": 198,
+    "replies": 61,
+    "timeAgo": "5 days ago"
+  },
+  {
+    "id": 12,
+    "title": "INSEAD 1yr MBA worth it over 2yr programs?",
+    "body": "The one year timeline is appealing but wondering if I'd miss out on internship opportunities and network building. Anyone have insights on whether the condensed format is actually better or just faster",
+    "university": "INSEAD",
+    "country": "France",
+    "topic": "Admissions",
+    "hearts": 112,
+    "replies": 19,
+    "timeAgo": "5 days ago"
+  },
+  {
+    "id": 13,
+    "title": "Bringing my cat to France - possible?",
+    "body": "Has anyone done this? What's the process like and is it even realistic for student housing? I really don't want to leave her for 2 years but also don't want to be naive about this",
+    "university": "General France",
+    "country": "France",
+    "topic": "Housing",
+    "hearts": 43,
+    "replies": 8,
+    "timeAgo": "6 days ago"
+  },
+  {
+    "id": 14,
+    "title": "Best gym options near IE campus?",
+    "body": "Starting at IE in fall and trying to figure out the gym situation. Are there good options nearby or should I just get a gym membership somewhere central? What do most students do",
+    "university": "IE Madrid",
+    "country": "Spain",
+    "topic": "Student Life",
+    "hearts": 28,
+    "replies": 9,
+    "timeAgo": "1 week ago"
+  },
+  {
+    "id": 15,
+    "title": "Working part-time on student visa in Spain?",
+    "body": "Is this allowed and if so how many hours? Want to offset some living costs but don't want to mess up my visa status. Anyone have experience with this",
+    "university": "General Spain",
+    "country": "Spain",
+    "topic": "Visa",
+    "hearts": 156,
+    "replies": 34,
+    "timeAgo": "1 week ago"
+  },
+  {
+    "id": 16,
+    "title": "EDHEC vs Skema Business School",
+    "body": "Both accepted me and honestly never heard of either before applying lol. Which one has better recognition for jobs? They both seem tier 2 French schools but want to make sure I pick the right one",
+    "university": "EDHEC",
+    "country": "France",
+    "topic": "Admissions",
+    "hearts": 54,
+    "replies": 14,
+    "timeAgo": "1 week ago"
+  },
+  {
+    "id": 17,
+    "title": "Dating scene at Spanish universities",
+    "body": "Gonna be real - is it easy to meet people romantically or is everyone super focused on career stuff? Coming from a big state school where social life was huge so wondering what to expect",
+    "university": "General Spain",
+    "country": "Spain",
+    "topic": "Student Life",
+    "hearts": 187,
+    "replies": 43,
+    "timeAgo": "2 weeks ago"
+  },
+  {
+    "id": 18,
+    "title": "Health insurance requirements for France",
+    "body": "The visa application mentions health insurance but I'm confused about what counts. Can I use my US insurance with international coverage or do I need to buy French insurance specifically? Help pls",
+    "university": "General France",
+    "country": "France",
+    "topic": "Visa",
+    "hearts": 76,
+    "replies": 22,
+    "timeAgo": "2 weeks ago"
+  },
+  {
+    "id": 19,
+    "title": "Barcelona or Madrid for tech jobs after graduation?",
+    "body": "Doing a CS masters and trying to figure out which city has better tech scene. I know Madrid is bigger but Barcelona seems more startup-y? Anyone in tech here have thoughts",
+    "university": "General Spain",
+    "country": "Spain",
+    "topic": "Careers",
+    "hearts": 134,
+    "replies": 27,
+    "timeAgo": "3 weeks ago"
+  },
+  {
+    "id": 20,
+    "title": "Chances of getting into HEC with non-traditional background?",
+    "body": "I have a liberal arts degree and 4 years work experience in marketing, not finance. Stats look good otherwise but worried my background isn't 'prestigious' enough for HEC. Should I even bother applying or is it a waste of application fee",
+    "university": "HEC Paris",
+    "country": "France",
+    "topic": "Admissions",
+    "hearts": 0,
+    "replies": 3,
+    "timeAgo": "3 weeks ago"
+  }
+];
+
+        // Load discussions into grid
+        function loadDiscussions() {
+            const grid = document.getElementById('discussionsGrid');
+            
+            discussions.forEach((discussion, index) => {
+                const card = document.createElement('div');
+                card.className = 'discussion-card';
+                card.style.opacity = '0';
+                card.onclick = () => openModal(discussion);
+                
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-meta">
+                            <span class="university-tag">${discussion.university}</span>
+                            <span class="time-ago">${discussion.timeAgo}</span>
+                        </div>
+                        <div class="hearts-container">
+                            <span class="heart-icon">❤️</span>
+                            <span class="hearts-count">${discussion.hearts}</span>
+                        </div>
+                    </div>
+                    <h3 class="discussion-title">${discussion.title}</h3>
+                    <p class="discussion-preview">${discussion.body}</p>
+                    <div class="card-footer">
+                        <span class="topic-badge">${discussion.topic}</span>
+                        <span class="replies-count">
+                            <span class="replies-icon">💬</span>
+                            ${discussion.replies} ${discussion.replies === 1 ? 'reply' : 'replies'}
+                        </span>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+
+            // Animate cards in with stagger
+            anime({
+                targets: '.discussion-card',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                rotate: [3, 0],
+                duration: 800,
+                delay: anime.stagger(100),
+                easing: 'easeOutExpo'
+            });
+        }
+
+        // Open modal with discussion details
+        function openModal(discussion) {
+            const overlay = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalBody.innerHTML = `
+                <div class="modal-header">
+                    <span class="modal-university">${discussion.university}</span>
+                    <h2 class="modal-title">${discussion.title}</h2>
+                    <div class="modal-meta">
+                        <div class="modal-meta-item">
+                            <span>📅</span>
+                            <span>${discussion.timeAgo}</span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <span>💬</span>
+                            <span>${discussion.replies} ${discussion.replies === 1 ? 'reply' : 'replies'}</span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <span class="topic-badge">${discussion.topic}</span>
+                        </div>
+                        <div class="modal-hearts">
+                            <span class="heart-icon">❤️</span>
+                            <span class="hearts-count">${discussion.hearts}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <p>${discussion.body}</p>
+                </div>
+                <div class="modal-actions">
+                    <button class="reply-button">💬 Reply to Discussion</button>
+                    <button class="heart-button">
+                        <span>❤️</span>
+                        <span>Give Heart</span>
+                    </button>
+                </div>
+            `;
+            
+            overlay.classList.add('active');
+            setTimeout(() => {
+                content.classList.add('active');
+            }, 10);
+        }
+
+        // Close modal
+        function closeModal() {
+            const overlay = document.getElementById('modalOverlay');
+            const content = document.getElementById('modalContent');
+            
+            content.classList.remove('active');
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 300);
+        }
+
+        // Event listeners
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'modalOverlay') {
+                closeModal();
+            }
+        });
+
+        // ESC key to close modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Animate page title on load
+        anime({
+            targets: '.page-title',
+            opacity: [0, 1],
+            translateY: [30, 0],
+            duration: 800,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.page-subtitle',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            duration: 800,
+            delay: 200,
+            easing: 'easeOutExpo'
+        });
+
+        // Load discussions when page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDiscussions();
+        });
+    </script>
+</body>
+</html>
