@@ -75,8 +75,13 @@
             width: 100%;
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
         nav a {
-            margin-left: 2rem;
             text-decoration: none;
             color: #333;
             font-weight: 500;
@@ -278,8 +283,6 @@
             position: relative;
         }
 
-
-
         .section-subtitle {
             font-size: 1.2rem;
             color: #4b5563;
@@ -420,6 +423,142 @@
 
         .stats-section .section-subtitle {
             color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Forum Section Styles */
+        .forum-section {
+            background: linear-gradient(135deg, #fff5f0 0%, #ffffff 50%, #f0f9ff 100%);
+            padding: 6rem 5%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .forum-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .forum-text {
+            padding: 2rem;
+        }
+
+        .forum-text h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #1e40af, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+
+        .forum-text p {
+            font-size: 1.2rem;
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .forum-features {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .forum-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .forum-feature-icon {
+            font-size: 1.8rem;
+            min-width: 40px;
+        }
+
+        .forum-feature-text h4 {
+            color: #1e40af;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .forum-feature-text p {
+            color: #6b7280;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .forum-preview {
+            position: relative;
+        }
+
+        .forum-card-sample {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            border: 2px solid #f3f4f6;
+            transition: all 0.3s;
+        }
+
+        .forum-card-sample:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(30, 64, 175, 0.15);
+            border-color: #1e40af;
+        }
+
+        .forum-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .forum-uni-tag {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .forum-hearts {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ea580c;
+            font-weight: 700;
+        }
+
+        .forum-card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+
+        .forum-card-preview {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .forum-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f3f4f6;
+            font-size: 0.9rem;
+            color: #9ca3af;
         }
 
         /* Culture section */
@@ -651,6 +790,23 @@
             .stat-number {
                 font-size: 2.5rem;
             }
+
+            .forum-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .forum-text h2 {
+                font-size: 2rem;
+            }
+
+            nav {
+                gap: 0.5rem;
+            }
+
+            nav a {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -660,6 +816,7 @@
     <header id="header">
         <div class="logo">MAGELLAN</div>
         <nav>
+            <a href="forum.html">Community Forum</a>
             <a href="search.html" class="cta-button">Find Your University</a>
         </nav>
     </header>
@@ -704,24 +861,87 @@
 
     <section class="stats-section">
         <h2 class="section-title">The Numbers Speak for Themselves</h2>
-        <p class="section-subtitle">Discover why thousands of students are choosing European universities for their education.</p>
+        <p class="section-subtitle">Discover why thousands of students are choosing European universities for their higher education.</p>
         
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number">40%</div>
+                <div class="stat-number">50-80%</div>
                 <div class="stat-label">Lower Tuition Costs</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">2</div>
+                <div class="stat-number">22+</div>
                 <div class="stat-label">Countries to Explore</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">3+</div>
+                <div class="stat-number">40+</div>
                 <div class="stat-label">Languages Spoken</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">13+</div>
+                <div class="stat-number">1800+</div>
                 <div class="stat-label">Universities Available</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="forum-section">
+        <div class="forum-content">
+            <div class="forum-text">
+                <h2>Join Our Community Forum</h2>
+                <p>Connect with students who are on the same journey. Get real answers from people who've been there, share your experiences, and find support every step of the way.</p>
+                
+                <div class="forum-features">
+                    <div class="forum-feature">
+                        <div class="forum-feature-icon">💬</div>
+                        <div class="forum-feature-text">
+                            <h4>Ask Questions</h4>
+                            <p>Get advice from current students and alumni about admissions, housing, visas, and student life.</p>
+                        </div>
+                    </div>
+                    <div class="forum-feature">
+                        <div class="forum-feature-icon">🎯</div>
+                        <div class="forum-feature-text">
+                            <h4>Share Experiences</h4>
+                            <p>Help others by sharing your insights about specific universities, cities, and programs.</p>
+                        </div>
+                    </div>
+                    <div class="forum-feature">
+                        <div class="forum-feature-icon">🤝</div>
+                        <div class="forum-feature-text">
+                            <h4>Build Connections</h4>
+                            <p>Find your future classmates and build friendships before you even arrive on campus.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="forum.html" class="cta-button orange" style="margin-top: 2rem;">Explore the Forum</a>
+            </div>
+            
+            <div class="forum-preview">
+                <div class="forum-card-sample">
+                    <div class="forum-card-header">
+                        <span class="forum-uni-tag">HEC Paris</span>
+                        <div class="forum-hearts">❤️ 203</div>
+                    </div>
+                    <h3 class="forum-card-title">HEC Paris vs ESADE - help me decide??</h3>
+                    <p class="forum-card-preview">Got into both programs (MiM) and genuinely can't choose. HEC has the prestige but ESADE has better vibes...</p>
+                    <div class="forum-card-footer">
+                        <span>💬 47 replies</span>
+                        <span>8 hours ago</span>
+                    </div>
+                </div>
+                
+                <div class="forum-card-sample">
+                    <div class="forum-card-header">
+                        <span class="forum-uni-tag">ESADE Barcelona</span>
+                        <div class="forum-hearts">❤️ 178</div>
+                    </div>
+                    <h3 class="forum-card-title">ESADE party scene?</h3>
+                    <p class="forum-card-preview">Committed to ESADE for fall and want to know what the social life is actually like...</p>
+                    <div class="forum-card-footer">
+                        <span>💬 52 replies</span>
+                        <span>1 day ago</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -794,7 +1014,7 @@
     </section>
 
     <footer>
-        <p>&copy;  Magellan 2026.</p>
+        <p>&copy; 2026 Magellan.</p>
     </footer>
 
     <script>
@@ -855,7 +1075,7 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.benefit-card, .step-card, .culture-card').forEach(card => {
+        document.querySelectorAll('.benefit-card, .step-card, .culture-card, .forum-card-sample').forEach(card => {
             card.style.opacity = '0';
             observer.observe(card);
         });
