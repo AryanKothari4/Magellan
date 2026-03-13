@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magellan - Parent's Guide to European Universities</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #fff5f0 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            color: #4b5563;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .last-updated {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 3rem;
+            color: #92400e;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #1e40af;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #1e40af, #ea580c);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 45%;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            border-color: #1e40af;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(30, 64, 175, 0.2);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(30, 64, 175, 0.3);
+            z-index: 10;
+        }
+
+        .timeline-content h3 {
+            color: #1e40af;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content .period {
+            color: #ea580c;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-content ul {
+            list-style: none;
+            color: #4b5563;
+        }
+
+        .timeline-content ul li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .timeline-content ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        /* Checklist Sections */
+        .checklist-section {
+            margin-bottom: 3rem;
+        }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .checklist-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #1e40af;
+            transition: all 0.3s;
+        }
+
+        .checklist-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 40px rgba(30, 64, 175, 0.15);
+        }
+
+        .checklist-card h3 {
+            color: #1e40af;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checklist-card .icon {
+            font-size: 1.8rem;
+        }
+
+        .checklist-card ul {
+            list-style: none;
+        }
+
+        .checklist-card ul li {
+            padding: 0.75rem 0;
+            color: #4b5563;
+            border-bottom: 1px solid #e5e7eb;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .checklist-card ul li:last-child {
+            border-bottom: none;
+        }
+
+        .checklist-card ul li::before {
+            content: '□';
+            position: absolute;
+            left: 0;
+            color: #1e40af;
+            font-size: 1.2rem;
+        }
+
+        /* Country Selector */
+        .country-selector {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
+
+        .country-selector h3 {
+            color: #1e40af;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .country-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .country-tab {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #f0f9ff, #fff);
+            border: 2px solid #e5e7eb;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .country-tab:hover {
+            border-color: #1e40af;
+            transform: translateY(-2px);
+        }
+
+        .country-tab.active {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            border-color: #1e40af;
+        }
+
+        .country-content {
+            display: none;
+            padding: 1.5rem;
+            background: #f9fafb;
+            border-radius: 15px;
+        }
+
+        .country-content.active {
+            display: block;
+        }
+
+        .country-content h4 {
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+
+        .country-content p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .info-box strong {
+            color: #1e40af;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: #f9fafb;
+        }
+
+        .faq-question h4 {
+            color: #1e40af;
+            font-size: 1.1rem;
+        }
+
+        .faq-arrow {
+            font-size: 1.5rem;
+            color: #1e40af;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(30, 64, 175, 0.15);
+        }
+
+        .resource-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-card h4 {
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-card p {
+            color: #4b5563;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                padding-left: 80px;
+            }
+
+            .timeline-content {
+                width: 100%;
+            }
+
+            .timeline-marker {
+                left: 30px;
+            }
+
+            .checklist-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .country-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">MAGELLAN</a>
+        <nav>
+            <a href="search.html" style="text-decoration: none; color: #1e40af; font-weight: 600;">Find Universities</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Parent's Guide to European Universities</h1>
+            <p>A comprehensive roadmap to help your child study abroad in Europe</p>
+        </div>
+
+        <div class="last-updated">
+            <strong>📅 Last Updated:</strong> March 2026 | Information subject to change. Always verify with official sources.
+        </div>
+
+        <!-- Timeline Section -->
+        <section class="timeline-section">
+            <h2 class="section-title">Planning Timeline</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">18-24</div>
+                    <div class="timeline-content">
+                        <h3>18-24 Months Before</h3>
+                        <p class="period">Junior Year of High School</p>
+                        <ul>
+                            <li>Research universities and programs</li>
+                            <li>Understand admission requirements</li>
+                            <li>Start learning about visa processes</li>
+                            <li>Begin financial planning</li>
+                            <li>Check language requirements</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">12-18</div>
+                    <div class="timeline-content">
+                        <h3>12-18 Months Before</h3>
+                        <p class="period">Summer Before Senior Year</p>
+                        <ul>
+                            <li>Take required standardized tests (SAT/ACT)</li>
+                            <li>Take language proficiency tests if needed</li>
+                            <li>Request academic transcripts</li>
+                            <li>Finalize university shortlist</li>
+                            <li>Research scholarship opportunities</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">6-12</div>
+                    <div class="timeline-content">
+                        <h3>6-12 Months Before</h3>
+                        <p class="period">Fall of Senior Year</p>
+                        <ul>
+                            <li>Submit university applications</li>
+                            <li>Write personal statements/essays</li>
+                            <li>Gather recommendation letters</li>
+                            <li>Apply for scholarships</li>
+                            <li>Get documents apostilled if required</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">3-6</div>
+                    <div class="timeline-content">
+                        <h3>3-6 Months Before</h3>
+                        <p class="period">Winter/Spring of Senior Year</p>
+                        <ul>
+                            <li>Receive admission decisions</li>
+                            <li>Accept university offer</li>
+                            <li>Apply for student visa</li>
+                            <li>Arrange health insurance</li>
+                            <li>Start housing search</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker">1-3</div>
+                    <div class="timeline-content">
+                        <h3>1-3 Months Before</h3>
+                        <p class="period">Summer Before Departure</p>
+                        <ul>
+                            <li>Finalize housing arrangements</li>
+                            <li>Book flights</li>
+                            <li>Set up international banking</li>
+                            <li>Attend pre-departure orientations</li>
+                            <li>Pack and prepare for move</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Checklists -->
+        <section class="checklist-section">
+            <h2 class="section-title">Complete Preparation Checklist</h2>
+            
+            <div class="checklist-grid">
+                <div class="checklist-card">
+                    <h3><span class="icon">📚</span> Academic Requirements</h3>
+                    <ul>
+                        <li>High school diploma or equivalent</li>
+                        <li>Official transcripts (translated if needed)</li>
+                        <li>SAT/ACT scores (some programs)</li>
+                        <li>AP/IB exam scores (if applicable)</li>
+                        <li>Letters of recommendation</li>
+                        <li>Personal statement/essay</li>
+                        <li>Portfolio (art/design programs)</li>
+                    </ul>
+                </div>
+
+                <div class="checklist-card">
+                    <h3><span class="icon">🗣️</span> Language Requirements</h3>
+                    <ul>
+                        <li>English proficiency test (TOEFL/IELTS)</li>
+                        <li>Local language test (if required)</li>
+                        <li>Language course certificates</li>
+                        <li>Minimum score requirements check</li>
+                        <li>Test registration and scheduling</li>
+                        <li>Preparation courses consideration</li>
+                    </ul>
+                </div>
+
+                <div class="checklist-card">
+                    <h3><span class="icon">💰</span> Financial Planning</h3>
+                    <ul>
+                        <li>Tuition fee calculation</li>
+                        <li>Living expenses estimate</li>
+                        <li>Proof of financial means</li>
+                        <li>Scholarship applications</li>
+                        <li>Student loan options</li>
+                        <li>Currency exchange planning</li>
+                        <li>International bank account setup</li>
+                    </ul>
+                </div>
+
+                <div class="checklist-card">
+                    <h3><span class="icon">🛂</span> Visa & Legal</h3>
+                    <ul>
+                        <li>Valid passport (6+ months validity)</li>
+                        <li>Student visa application</li>
+                        <li>Letter of acceptance from university</li>
+                        <li>Proof of accommodation</li>
+                        <li>Proof of financial resources</li>
+                        <li>Health insurance certificate</li>
+                        <li>Visa interview preparation</li>
+                        <li>Biometric appointment</li>
+                    </ul>
+                </div>
+
+                <div class="checklist-card">
+                    <h3><span class="icon">🏠</span> Housing & Living</h3>
+                    <ul>
+                        <li>University dormitory application</li>
+                        <li>Private accommodation search</li>
+                        <li>Lease agreement review</li>
+                        <li>Deposit payment</li>
+                        <li>Utility setup information</li>
+                        <li>Local registration requirements</li>
+                        <li>Roommate communication</li>
+                    </ul>
+                </div>
+
+                <div class="checklist-card">
+                    <h3><span class="icon">🏥</span> Health & Insurance</h3>
+                    <ul>
+                        <li>Health insurance (required for visa)</li>
+                        <li>Vaccination records</li>
+                        <li>Medical examination (if required)</li>
+                        <li>Prescription medications supply</li>
+                        <li>Doctor's note for medications</li>
+                        <li>International health card</li>
+                        <li>Emergency contacts list</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Country-Specific Information -->
+        <section class="country-selector">
+            <h3>Country-Specific Requirements</h3>
+            <p style="color: #4b5563; margin-bottom: 1rem;">Select a country to view specific visa and application details</p>
+            
+            <div class="country-tabs">
+                <div class="country-tab active" onclick="showCountry('germany')">🇩🇪 Germany</div>
+                <div class="country-tab" onclick="showCountry('netherlands')">🇳🇱 Netherlands</div>
+                <div class="country-tab" onclick="showCountry('france')">🇫🇷 France</div>
+                <div class="country-tab" onclick="showCountry('spain')">🇪🇸 Spain</div>
+                <div class="country-tab" onclick="showCountry('italy')">🇮🇹 Italy</div>
+                <div class="country-tab" onclick="showCountry('uk')">🇬🇧 United Kingdom</div>
+            </div>
+
+            <div class="country-content active" id="germany">
+                <h4>Germany - Student Visa Requirements</h4>
+                <p>Germany offers high-quality education with low or no tuition fees at public universities.</p>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <strong>Visa Type</strong>
+                        National Visa (Type D)
+                    </div>
+                    <div class="info-box">
+                        <strong>Processing Time</strong>
+                        6-12 weeks
+                    </div>
+                    <div class="info-box">
+                        <strong>Financial Proof</strong>
+                        €11,904/year (blocked account)
+                    </div>
+                    <div class="info-box">
+                        <strong>Health Insurance</strong>
+                        Mandatory from day 1
+                    </div>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Key Note:</strong> Must open a blocked account (Sperrkonto) before visa application.</p>
+            </div>
+
+            <div class="country-content" id="netherlands">
+                <h4>Netherlands - Student Visa Requirements</h4>
+                <p>The Netherlands offers many English-taught programs and a welcoming international student community.</p>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <strong>Visa Type</strong>
+                        MVV + Residence Permit
+                    </div>
+                    <div class="info-box">
+                        <strong>Processing Time</strong>
+                        4-12 weeks
+                    </div>
+                    <div class="info-box">
+                        <strong>Financial Proof</strong>
+                        €11,600-15,000/year
+                    </div>
+                    <div class="info-box">
+                        <strong>Health Insurance</strong>
+                        Dutch insurance required
+                    </div>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Key Note:</strong> University typically handles visa application for you.</p>
+            </div>
+
+            <div class="country-content" id="france">
+                <h4>France - Student Visa Requirements</h4>
+                <p>France combines academic excellence with rich culture and relatively affordable living.</p>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <strong>Visa Type</strong>
+                        Long-stay student visa
+                    </div>
+                    <div class="info-box">
+                        <strong>Processing Time</strong>
+                        2-4 weeks
+                    </div>
+                    <div class="info-box">
+                        <strong>Financial Proof</strong>
+                        €615/month minimum
+                    </div>
+                    <div class="info-box">
+                        <strong>Health Insurance</strong>
+                        Student social security
+                    </div>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Key Note:</strong> Campus France procedure required for most countries.</p>
+            </div>
+
+            <div class="country-content" id="spain">
+                <h4>Spain - Student Visa Requirements</h4>
+                <p>Spain offers beautiful weather, vibrant culture, and affordable education.</p>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <strong>Visa Type</strong>
+                        Student Visa (Type D)
+                    </div>
+                    <div class="info-box">
+                        <strong>Processing Time</strong>
+                        1-3 months
+                    </div>
+                    <div class="info-box">
+                        <strong>Financial Proof</strong>
+                        €600-900/month
+                    </div>
+                    <div class="info-box">
+                        <strong>Health Insurance</strong>
+                        Private or public coverage
+                    </div>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Key Note:</strong> Medical certificate and criminal background check required.</p>
+            </div>
+
+            <div class="country-content" id="italy">
+                <h4>Italy - Student Visa Requirements</h4>
+                <p>Italy combines world-class education with incredible art, history, and cuisine.</p>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <strong>Visa Type</strong>
+                        National Visa (Type D)
+                    </div>
+                    <div class="info-box">
+                        <strong>Processing Time</strong>
+                        1-3 months
+                    </div>
+                    <div class="info-box">
+                        <strong>Financial Proof</strong>
+                        €459.83/month minimum
+                    </div>
+                    <div class="info-box">
+                        <strong>Health Insurance</strong>
+                        Mandatory coverage
+                    </div>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Key Note:</strong> Dichiarazione di valore (certificate of value) needed for diploma.</p>
+            </div>
+
+            <div class="country-content" id="uk">
+                <h4>United Kingdom - Student Visa Requirements</h4>
+                <p>The UK offers prestigious universities and diverse cultural experiences.</p>
+                <div class="info-grid">
+                    <div class="info-box">
+                        <strong>Visa Type</strong>
+                        Student Visa (Tier 4)
+                    </div>
+                    <div class="info-box">
+                        <strong>Processing Time</strong>
+                        3 weeks
+                    </div>
+                    <div class="info-box">
+                        <strong>Financial Proof</strong>
+                        £1,023-1,334/month
+                    </div>
+                    <div class="info-box">
+                        <strong>Health Insurance</strong>
+                        IHS surcharge (£470/year)
+                    </div>
+                </div>
+                <p style="margin-top: 1rem;"><strong>Key Note:</strong> CAS (Confirmation of Acceptance) required from university.</p>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>How much does it cost to study in Europe compared to the US?</h4>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        European universities are significantly more affordable. Public universities in Germany, Norway, and some other countries have no tuition fees. Others range from €1,000-20,000/year compared to US averages of $30,000-60,000/year. Total costs including living expenses are typically 50-80% lower than comparable US education.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>Are European degrees recognized in the United States?</h4>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Yes! Most European universities are internationally recognized and accredited. Many rank among the world's top institutions. US employers and graduate schools regularly accept European degrees. However, for specific professional licenses (medicine, law), additional certification may be required.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>Can my child work while studying in Europe?</h4>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Most European countries allow international students to work part-time (typically 15-20 hours/week during term, full-time during breaks). EU countries generally have favorable work policies for students. After graduation, many countries offer post-study work visas ranging from 1-2 years.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>Do students need to speak the local language?</h4>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Many European universities offer programs entirely in English, especially at the bachelor's level. However, learning the local language is beneficial for daily life and integration. Some countries require basic language proficiency for visa purposes, while others only require English proficiency for English-taught programs.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>What about healthcare and safety?</h4>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        European countries generally have excellent healthcare systems. Students are required to have health insurance, which is often more affordable than US options. Most European cities rank among the world's safest, with low crime rates. Universities provide support services and emergency assistance for international students.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>How do application deadlines work?</h4>
+                    <span class="faq-arrow">▼</span>
+                </div>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        European application deadlines vary by country and program. Generally, they range from December to May for fall intake. Some countries have rolling admissions, while others have strict cutoff dates. It's important to research specific deadlines for each university, as they can differ significantly from US application timelines.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section class="checklist-section">
+            <h2 class="section-title">Helpful Resources</h2>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="icon">🌐</div>
+                    <h4>Study Portal EU</h4>
+                    <p>Comprehensive database of European study programs and universities</p>
+                </div>
+
+                <div class="resource-card">
+                    <div class="icon">📋</div>
+                    <h4>Embassy Websites</h4>
+                    <p>Official visa information and requirements for each country</p>
+                </div>
+
+                <div class="resource-card">
+                    <div class="icon">💬</div>
+                    <h4>Student Forums</h4>
+                    <p>Connect with current students and get firsthand experiences</p>
+                </div>
+
+                <div class="resource-card">
+                    <div class="icon">💵</div>
+                    <h4>Scholarship Databases</h4>
+                    <p>Search for funding opportunities and financial aid options</p>
+                </div>
+
+                <div class="resource-card">
+                    <div class="icon">✈️</div>
+                    <h4>Pre-Departure Guides</h4>
+                    <p>Practical tips for moving abroad and settling in</p>
+                </div>
+
+                <div class="resource-card">
+                    <div class="icon">🎓</div>
+                    <h4>University Rankings</h4>
+                    <p>Compare programs and institutions across Europe</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Animate on load
+        anime({
+            targets: '.page-header h1',
+            opacity: [0, 1],
+            translateY: [-30, 0],
+            duration: 1000,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.page-header p',
+            opacity: [0, 1],
+            translateY: [-20, 0],
+            duration: 1000,
+            delay: 200,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.last-updated',
+            opacity: [0, 1],
+            scale: [0.9, 1],
+            duration: 800,
+            delay: 400,
+            easing: 'easeOutExpo'
+        });
+
+        // Animate timeline items on scroll
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        opacity: [0, 1],
+                        translateY: [50, 0],
+                        duration: 800,
+                        easing: 'easeOutExpo'
+                    });
+                    timelineObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            item.style.opacity = '0';
+            timelineObserver.observe(item);
+        });
+
+        // Animate checklist cards
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        opacity: [0, 1],
+                        translateX: [-30, 0],
+                        duration: 600,
+                        delay: index * 100,
+                        easing: 'easeOutExpo'
+                    });
+                    cardObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.checklist-card, .resource-card').forEach(card => {
+            card.style.opacity = '0';
+            cardObserver.observe(card);
+        });
+
+        // Country selector functionality
+        function showCountry(country) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.country-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all content
+            document.querySelectorAll('.country-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Show corresponding content
+            document.getElementById(country).classList.add('active');
+
+            // Animate content
+            anime({
+                targets: `#${country}`,
+                opacity: [0, 1],
+                translateY: [20, 0],
+                duration: 500,
+                easing: 'easeOutExpo'
+            });
+        }
+
+        // FAQ toggle functionality
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const isActive = faqItem.classList.contains('active');
+
+            // Close all FAQs
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+                item.querySelector('.faq-answer').style.maxHeight = null;
+            });
+
+            // Open clicked FAQ if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+                answer.style.maxHeight = answer.scrollHeight + 'px';
+            }
+        }
+    </script>
+</body>
+</html>
