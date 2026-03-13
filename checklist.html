@@ -20,6 +20,55 @@
             min-height: 100vh;
         }
 
+        /* Page wrapper for ads */
+        .page-wrapper {
+            display: flex;
+            max-width: 1800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Side Ad Bars */
+        .side-ad {
+            width: 160px;
+            height: 600px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #000;
+            text-align: center;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .side-ads-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-ads-container.left {
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        .side-ads-container.right {
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        .side-ads-container .side-ad:first-child {
+            margin-top: 800px;
+        }
+
+        .side-ads-container .side-ad:nth-child(2) {
+            margin-top: 1400px;
+        }
+
         header {
             background-color: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
@@ -40,6 +89,7 @@
         }
 
         .container {
+            flex: 1;
             max-width: 1200px;
             margin: 0 auto;
             padding: 4rem 2rem;
@@ -474,6 +524,10 @@
             .country-tabs {
                 flex-direction: column;
             }
+
+            .side-ads-container {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -485,7 +539,18 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="page-wrapper">
+        <!-- Left Side Ads -->
+        <div class="side-ads-container left">
+            <div class="side-ad">
+                <div>PLACEHOLDER<br>AD<br>SPACE</div>
+            </div>
+            <div class="side-ad">
+                <div>PLACEHOLDER<br>AD<br>SPACE</div>
+            </div>
+        </div>
+
+        <div class="container">
         <div class="page-header">
             <h1>Parent's Guide to European Universities</h1>
             <p>A comprehensive roadmap to help your child study abroad in Europe</p>
@@ -951,6 +1016,17 @@
             </div>
         </section>
     </div>
+
+    <!-- Right Side Ads -->
+    <div class="side-ads-container right">
+        <div class="side-ad">
+            <div>PLACEHOLDER<br>AD<br>SPACE</div>
+        </div>
+        <div class="side-ad">
+            <div>PLACEHOLDER<br>AD<br>SPACE</div>
+        </div>
+    </div>
+</div>
 
     <script>
         // Animate on load
