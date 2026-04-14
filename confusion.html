@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confused Where to Start? - Magellan</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #fff5f0 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Page wrapper for ads */
+        .page-wrapper {
+            display: flex;
+            max-width: 1800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Side Ad Bars */
+        .side-ad {
+            width: 160px;
+            height: 600px;
+            background: linear-gradient(135deg, #ff00ff, #00ffff);
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #000;
+            text-align: center;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+
+        .side-ads-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-ads-container.left {
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        .side-ads-container.right {
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        .side-ads-container .side-ad:first-child {
+            margin-top: 800px;
+        }
+
+        .side-ads-container .side-ad:nth-child(2) {
+            margin-top: 1400px;
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            color: #4b5563;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Sponsored Ad Banner */
+        .sponsored-ad {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            border: 3px dashed #b45309;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+        }
+
+        .sponsored-ad h3 {
+            font-size: 1.5rem;
+            color: #78350f;
+            margin-bottom: 0.5rem;
+        }
+
+        .sponsored-ad p {
+            color: #92400e;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .section {
+            margin-bottom: 5rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #1e40af;
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #1e40af, #ea580c);
+            border-radius: 2px;
+        }
+
+        .intro-text {
+            font-size: 1.2rem;
+            color: #4b5563;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #1e40af;
+            transition: all 0.3s;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(30, 64, 175, 0.15);
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .step-card h3 {
+            color: #1e40af;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-card p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        .step-card ul {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+            color: #4b5563;
+        }
+
+        .step-card ul li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* Decision Flowchart */
+        .flowchart {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin: 2rem 0;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .flow-step::after {
+            content: '↓';
+            position: absolute;
+            left: 35px;
+            bottom: -30px;
+            font-size: 2rem;
+            color: #1e40af;
+        }
+
+        .flow-step:last-child::after {
+            display: none;
+        }
+
+        .flow-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-right: 2rem;
+            flex-shrink: 0;
+        }
+
+        .flow-content h4 {
+            color: #1e40af;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-content p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* Questions Grid */
+        .questions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .question-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid #ea580c;
+            transition: all 0.3s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(234, 88, 12, 0.15);
+        }
+
+        .question-card h4 {
+            color: #ea580c;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-card p {
+            color: #4b5563;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Action Items */
+        .action-list {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .action-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: #f9fafb;
+            border-radius: 10px;
+            border-left: 4px solid #10b981;
+            transition: all 0.3s;
+        }
+
+        .action-item:hover {
+            background: #f0f9ff;
+            border-left-color: #1e40af;
+        }
+
+        .action-icon {
+            font-size: 1.8rem;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .action-content h4 {
+            color: #1e40af;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-content p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* Mistakes Section */
+        .mistakes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .mistake-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            border-left: 5px solid #ef4444;
+            transition: all 0.3s;
+        }
+
+        .mistake-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.15);
+        }
+
+        .mistake-card h4 {
+            color: #ef4444;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mistake-card p {
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* Resources Section */
+        .resources-list {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .resource-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+
+        .resource-item h4 {
+            color: #1e40af;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .resource-item p {
+            color: #4b5563;
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .resource-item a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .resource-item a:hover {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+
+        .disclaimer {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            color: #92400e;
+            font-size: 0.95rem;
+        }
+
+        /* Culture Highlight Box */
+        .culture-highlight {
+            background: linear-gradient(135deg, #fff5f0 0%, #fef3c7 100%);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 3px solid #ea580c;
+            margin: 3rem 0;
+            box-shadow: 0 10px 30px rgba(234, 88, 12, 0.15);
+        }
+
+        .culture-highlight h3 {
+            color: #ea580c;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .culture-highlight p {
+            color: #4b5563;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .steps-grid, .questions-grid, .mistakes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-step {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .flow-icon {
+                margin-bottom: 1rem;
+            }
+
+            .side-ads-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">MAGELLAN</a>
+        <nav>
+            <a href="search.html" style="text-decoration: none; color: #1e40af; font-weight: 600;">Find Universities</a>
+        </nav>
+    </header>
+
+    <div class="page-wrapper">
+        <!-- Left Side Ads -->
+        <div class="side-ads-container left">
+            <div class="side-ad">
+                <div>PLACEHOLDER<br>AD<br>SPACE</div>
+            </div>
+            <div class="side-ad">
+                <div>PLACEHOLDER<br>AD<br>SPACE</div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="page-header">
+                <h1>Confused Where to Start?</h1>
+                <p>We get it—studying abroad can feel overwhelming. But don't worry, we're here to break it down into simple, manageable steps. Let's turn your dream into a plan.</p>
+            </div>
+
+            <div class="sponsored-ad">
+                <h3>Premium Advertising Space Available</h3>
+                <p>Contact us to feature your brand here</p>
+            </div>
+
+            <!-- First Steps Overview -->
+            <section class="section">
+                <h2 class="section-title">First Steps Overview</h2>
+                <p class="intro-text">Before diving into university applications, take a step back and assess your situation. These foundational steps will set you up for success.</p>
+                
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Assess Your Timeline</h3>
+                        <p>When do you want to start studying abroad? Most students begin planning 18-24 months before their intended start date. This gives you enough time for:</p>
+                        <ul>
+                            <li>Researching universities</li>
+                            <li>Taking required tests</li>
+                            <li>Preparing applications</li>
+                            <li>Securing visas</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Determine Your Budget</h3>
+                        <p>Be realistic about what you can afford. Consider:</p>
+                        <ul>
+                            <li>Tuition fees (€0-20,000/year in Europe)</li>
+                            <li>Living expenses (€800-1,500/month)</li>
+                            <li>Travel and insurance costs</li>
+                            <li>Visa fees and deposits</li>
+                            <li>Scholarship opportunities</li>
+                        </ul>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Identify Your Priorities</h3>
+                        <p>What matters most to you? Rank these factors:</p>
+                        <ul>
+                            <li>Academic reputation</li>
+                            <li>Cost and affordability</li>
+                            <li>Location and culture</li>
+                            <li>Language of instruction</li>
+                            <li>Career opportunities</li>
+                            <li>Lifestyle and social scene</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="culture-highlight">
+                    <h3>🌍 Why Culture Matters</h3>
+                    <p>At Magellan, we believe that finding the right cultural fit is just as important as finding the right academic program. You'll be living in this city for years—wouldn't you want to love the food, the people, the vibe? Whether you're drawn to Barcelona's beach culture, Berlin's nightlife, or Amsterdam's café scene, choosing a place where you'll thrive personally will make your academic journey infinitely better. Don't just pick a university—pick a lifestyle.</p>
+                </div>
+            </section>
+
+            <!-- Decision Making Flowchart -->
+            <section class="section">
+                <h2 class="section-title">Your Decision-Making Roadmap</h2>
+                <p class="intro-text">Follow this flowchart to guide your journey from confusion to clarity.</p>
+                
+                <div class="flowchart">
+                    <div class="flow-step">
+                        <div class="flow-icon">🎯</div>
+                        <div class="flow-content">
+                            <h4>Define Your Goals</h4>
+                            <p>What do you want to study? What career are you pursuing? What kind of experience do you want?</p>
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="flow-icon">🌍</div>
+                        <div class="flow-content">
+                            <h4>Choose Your Countries</h4>
+                            <p>Based on language, culture, cost, and program availability, narrow down to 2-4 countries of interest.</p>
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="flow-icon">🏛️</div>
+                        <div class="flow-content">
+                            <h4>Research Universities</h4>
+                            <p>Look at rankings, program offerings, admission requirements, and student reviews. Create a shortlist of 8-12 universities.</p>
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="flow-icon">📋</div>
+                        <div class="flow-content">
+                            <h4>Check Requirements</h4>
+                            <p>Review academic requirements, language tests, application deadlines, and visa processes for each university.</p>
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="flow-icon">✍️</div>
+                        <div class="flow-content">
+                            <h4>Prepare Applications</h4>
+                            <p>Gather transcripts, write essays, secure recommendations, and take required tests. Apply to 5-8 universities.</p>
+                        </div>
+                    </div>
+
+                    <div class="flow-step">
+                        <div class="flow-icon">🎓</div>
+                        <div class="flow-content">
+                            <h4>Make Your Decision</h4>
+                            <p>Compare offers, revisit your priorities, and choose the university that's the best fit for you academically AND culturally.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="sponsored-ad">
+                <h3>Premium Advertising Space Available</h3>
+                <p>Contact us to feature your brand here</p>
+            </div>
+
+            <!-- Research Starting Points -->
+            <section class="section">
+                <h2 class="section-title">Where to Research</h2>
+                <p class="intro-text">Start your research with these trusted resources to find universities, compare programs, and learn from real students.</p>
+                
+                <div class="resources-list">
+                    <div class="resource-item">
+                        <h4>University Ranking Websites</h4>
+                        <p>Get an overview of top universities and compare institutions globally.</p>
+                        <a href="https://www.topuniversities.com" target="_blank">QS World University Rankings →</a><br>
+                        <a href="https://www.timeshighereducation.com" target="_blank">Times Higher Education Rankings →</a>
+                    </div>
+
+                    <div class="resource-item">
+                        <h4>Student Review Platforms</h4>
+                        <p>Read honest reviews from current students and alumni about their experiences.</p>
+                        <a href="https://www.studyportals.com" target="_blank">StudyPortals →</a><br>
+                        <a href="https://www.studentcrowd.com" target="_blank">StudentCrowd →</a>
+                    </div>
+
+                    <div class="resource-item">
+                        <h4>Reddit & Online Communities</h4>
+                        <p>Connect with current students and get real, unfiltered advice about university life.</p>
+                        <a href="https://www.reddit.com/r/studyAbroad" target="_blank">r/studyAbroad →</a><br>
+                        <a href="https://www.reddit.com/r/ApplyingToCollege" target="_blank">r/ApplyingToCollege →</a>
+                    </div>
+
+                    <div class="resource-item">
+                        <h4>Program Search Databases</h4>
+                        <p>Search for specific programs by field of study, country, and language of instruction.</p>
+                        <a href="https://www.mastersportal.com" target="_blank">MastersPortal →</a><br>
+                        <a href="https://www.bachelorsportal.com" target="_blank">BachelorsPortal →</a>
+                    </div>
+                </div>
+
+                <div class="disclaimer">
+                    <strong>⚠️ Disclaimer:</strong> External links may become outdated or information may change. Always verify details directly with universities and official government sources. Magellan is not responsible for the accuracy of third-party websites.
+                </div>
+            </section>
+
+            <!-- Key Questions -->
+            <section class="section">
+                <h2 class="section-title">Key Questions to Answer First</h2>
+                <p class="intro-text">Before you start applying, make sure you can answer these fundamental questions. They'll guide every decision you make.</p>
+                
+                <div class="questions-grid">
+                    <div class="question-card">
+                        <h4>What do you want to study?</h4>
+                        <p>Be specific. "Business" is too broad—do you want finance, marketing, entrepreneurship, or international business? Your program choice will determine which universities you can apply to.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <h4>Which countries interest you?</h4>
+                        <p>Consider language barriers, cultural preferences, climate, and visa policies. Do you want to be near the beach or in a bustling city? Near mountains or in a historic capital?</p>
+                    </div>
+
+                    <div class="question-card">
+                        <h4>What's your realistic budget?</h4>
+                        <p>Include tuition, living expenses, travel, insurance, and emergency funds. Can your family support you? Will you need scholarships or part-time work?</p>
+                    </div>
+
+                    <div class="question-card">
+                        <h4>Are you willing to learn a new language?</h4>
+                        <p>Many programs are in English, but some require local language proficiency. Are you open to learning German, French, Spanish, or Italian?</p>
+                    </div>
+
+                    <div class="question-card">
+                        <h4>What kind of social scene do you want?</h4>
+                        <p>Are you looking for vibrant nightlife, a café culture, outdoor activities, or a quieter academic environment? Your happiness matters as much as your GPA.</p>
+                    </div>
+
+                    <div class="question-card">
+                        <h4>What are your career goals?</h4>
+                        <p>Do you want to work in Europe after graduation, or return home? Different countries have different post-study work visa policies that could impact your decision.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Immediate Action Items -->
+            <section class="section">
+                <h2 class="section-title">Immediate Action Items</h2>
+                <p class="intro-text">Ready to get started? Here's what you should do right now—today—to begin your journey.</p>
+                
+                <div class="action-list">
+                    <div class="action-item">
+                        <div class="action-icon">📊</div>
+                        <div class="action-content">
+                            <h4>Create a University Tracking Spreadsheet</h4>
+                            <p>Set up a spreadsheet with columns for: University Name, Location, Program, Tuition, Application Deadline, Requirements, Notes. This will be your command center for staying organized.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">💬</div>
+                        <div class="action-content">
+                            <h4>Join Student Forums and Communities</h4>
+                            <p>Join Reddit's r/studyAbroad, Facebook groups for your target universities, and Discord servers for international students. Ask questions, learn from others' experiences, and build your network.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">📧</div>
+                        <div class="action-content">
+                            <h4>Reach Out to Current Students</h4>
+                            <p>Find students on LinkedIn or Instagram who attend your target universities. Ask them about their honest experiences—most students are happy to help! This insider knowledge is invaluable.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">📅</div>
+                        <div class="action-content">
+                            <h4>Check Application Deadlines</h4>
+                            <p>European universities often have different deadlines than US schools. Some are as early as December or January for fall entry. Mark all important dates in your calendar NOW.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">📚</div>
+                        <div class="action-content">
+                            <h4>Start Preparing for Required Tests</h4>
+                            <p>If you need TOEFL, IELTS, SAT, or other standardized tests, begin studying now. These tests take time to prepare for, and you may want to take them multiple times to improve your score.</p>
+                        </div>
+                    </div>
+
+                    <div class="action-item">
+                        <div class="action-icon">🎯</div>
+                        <div class="action-content">
+                            <h4>Use Magellan's Search Tool</h4>
+                            <p>Our culture-based university matching tool helps you find universities that align with your lifestyle preferences—not just your academic goals. Try it now to discover your perfect fit!</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Common Mistakes -->
+            <section class="section">
+                <h2 class="section-title">Common Mistakes to Avoid</h2>
+                <p class="intro-text">Learn from others' mistakes. Here are the biggest pitfalls students fall into when applying to European universities.</p>
+                
+                <div class="mistakes-grid">
+                    <div class="mistake-card">
+                        <h4>❌ Starting Too Late</h4>
+                        <p>Many students wait until senior year to start researching. By then, crucial test dates have passed and early deadlines are missed. Start as early as possible—ideally junior year or earlier.</p>
+                    </div>
+
+                    <div class="mistake-card">
+                        <h4>❌ Ignoring Visa Requirements</h4>
+                        <p>Visa applications can take 2-4 months and require proof of finances, housing, and insurance. Don't wait until you're admitted to start researching visa requirements—know them upfront.</p>
+                    </div>
+
+                    <div class="mistake-card">
+                        <h4>❌ Overlooking Hidden Costs</h4>
+                        <p>Students often budget for tuition but forget about health insurance, residence permits, visa fees, initial housing deposits, and furniture. These can add €2,000-5,000 to your first-year expenses.</p>
+                    </div>
+
+                    <div class="mistake-card">
+                        <h4>❌ Only Looking at "Top" Universities</h4>
+                        <p>Rankings don't tell the whole story. A lower-ranked university in a city you love, with better industry connections and a supportive community, might be a better choice than a prestigious but isolating program.</p>
+                    </div>
+
+                    <div class="mistake-card">
+                        <h4>❌ Forgetting About Culture Fit</h4>
+                        <p>You can have the best program in the world, but if you hate the city, the weather, or the social scene, you'll be miserable. Choose a place where you can see yourself being happy for 3-4 years.</p>
+                    </div>
+
+                    <div class="mistake-card">
+                        <h4>❌ Not Having a Backup Plan</h4>
+                        <p>Apply to a range of universities—reach schools, target schools, and safety schools. Don't put all your eggs in one basket. Having options gives you leverage and peace of mind.</p>
+                    </div>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 4rem;">
+                <a href="search.html" class="cta-button orange" style="background: linear-gradient(135deg, #ea580c, #f97316); color: white; padding: 1.2rem 3rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1.2rem; display: inline-block; transition: all 0.3s;">Find Your Perfect University</a>
+            </div>
+        </div>
+
+        <!-- Right Side Ads -->
+        <div class="side-ads-container right">
+            <div class="side-ad">
+                <div>PLACEHOLDER<br>AD<br>SPACE</div>
+            </div>
+            <div class="side-ad">
+                <div>PLACEHOLDER<br>AD<br>SPACE</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animate on load
+        anime({
+            targets: '.page-header h1',
+            opacity: [0, 1],
+            translateY: [-30, 0],
+            duration: 1000,
+            easing: 'easeOutExpo'
+        });
+
+        anime({
+            targets: '.page-header p',
+            opacity: [0, 1],
+            translateY: [-20, 0],
+            duration: 1000,
+            delay: 200,
+            easing: 'easeOutExpo'
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        opacity: [0, 1],
+                        translateY: [30, 0],
+                        duration: 800,
+                        easing: 'easeOutExpo'
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.step-card, .question-card, .mistake-card, .action-item, .resource-item, .flow-step').forEach(el => {
+            el.style.opacity = '0';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
