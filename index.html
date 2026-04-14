@@ -212,7 +212,7 @@
         }
 
         .hero h1 {
-            font-size: 4.5rem;
+            font-size: 5.5rem;
             font-weight: 800;
             color: #1e40af;
             margin-bottom: 1.5rem;
@@ -233,10 +233,10 @@
         }
 
         .hero p {
-            font-size: 1.8rem;
+            font-size: 2.1rem;
             color: #4b5563;
             margin-bottom: 3rem;
-            max-width: 700px;
+            max-width: 800px;
             opacity: 0;
         }
 
@@ -284,9 +284,8 @@
         }
 
         .section-title {
-            font-size: 2.5rem;
+            font-size: 2.7rem;
             font-weight: 700;
-            color: #1e40af;
             margin-bottom: 1rem;
             text-align: center;
             position: relative;
@@ -304,9 +303,12 @@
 
         .benefits-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 2fr));
+            gap: 2.5rem;
             margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            text-align: center;
         }
 
         .benefit-card {
@@ -349,12 +351,13 @@
 
         .benefit-card h3 {
             font-size: 1.5rem;
+            text-align: center;
             color: #1e40af;
             margin-bottom: 1rem;
         }
 
         .benefit-card p {
-            color: #4b5563;
+            color: #313740;
             line-height: 1.6;
         }
 
@@ -1131,7 +1134,9 @@
     <header id="header">
         <div class="logo">MAGELLAN</div>
         <nav>
-            <a href="forum.html">Community Forum</a>
+            <a href="forum.html"> Community Forum </a>
+            <a href="checklist.html">  Parent's Guide  </a>
+            <a href="confusion.html"> Need Help?   </a> 
             <a href="search.html" class="cta-button">Find Your University</a>
         </nav>
     </header>
@@ -1141,35 +1146,34 @@
         <div class="float-element float2"></div>
         <div class="float-element float3"></div>
         
-        <h1>Search for your Ideal University</h1>
+        <h1>Find your Ideal University</h1>
         <p>Turning moving abroad into a plan, not just a dream.</p>
         
         <div class="search-cta-container">
-            <a href="search.html" class="search-cta">Start Your Journey</a>
+            <a href="search.html" class="search-cta">Start Your Journey Today</a>
         </div>
         
         <div class="scroll-indicator"></div>
     </section>
 
     <section class="section">
-        <h2 class="section-title">Why Choose Europe?</h2>
-        <p class="section-subtitle">Experience world-class education at a fraction of the cost, immerse yourself in diverse cultures, and build a truly global network.</p>
+        <h2 class="section-title">Why Should You Choose Europe?</h2>
         
         <div class="benefits-grid">
             <div class="benefit-card">
                 <div class="benefit-icon">💰</div>
-                <h3>Affordable Excellence</h3>
-                <p>European universities offer top-tier education at significantly lower tuition costs compared to US institutions. Many programs cost 50-80% less than American equivalents.</p>
+                <h3>Affordability</h3>
+                <p>European universities offer top-tier education at significantly lower tuition costs compared to US universities. Some programs in Germany are even free!</p>
             </div>
             <div class="benefit-card">
                 <div class="benefit-icon">🌍</div>
                 <h3>Cultural Immersion</h3>
-                <p>Live in historic cities, learn new languages, and experience diverse cultures firsthand. Europe offers unparalleled opportunities for personal growth and adventure.</p>
+                <p>By going to Europe, you can live in historic cities, learn new languages, and experience diverse cultures. Europe has infinite opportunities for personal growth and adventure.</p>
             </div>
             <div class="benefit-card">
                 <div class="benefit-icon">🎓</div>
-                <h3>Global Recognition</h3>
-                <p>Degrees from European universities are recognized worldwide and highly valued by employers. Build an international network that spans continents.</p>
+                <h3>Globally Recognized</h3>
+                <p>Employers highly value degrees from European universities, which are recognized worldwide. You can build an international network that spans continents by going abroad.</p>
             </div>
         </div>
     </section>
@@ -1180,19 +1184,23 @@
         
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number">50-80%</div>
-                <div class="stat-label">Lower Tuition Costs</div>
+                <div class="stat-number">60-100%</div>
+                <div class="stat-label">Lower Tuition Costs (Some are free!)</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">22+</div>
+                <div class="stat-number">6+</div>
                 <div class="stat-label">Countries to Explore</div>
             </div>
+
+            <!-- This section seems useless, maybe we can add Number of Students that are abroad once we have that data.
             <div class="stat-card">
                 <div class="stat-number">40+</div>
                 <div class="stat-label">Languages Spoken</div>
             </div>
+            -->
+
             <div class="stat-card">
-                <div class="stat-number">1800+</div>
+                <div class="stat-number">300+</div>
                 <div class="stat-label">Universities Available</div>
             </div>
         </div>
@@ -1611,12 +1619,12 @@
                         anime({
                             targets: obj,
                             val: targetNum,
-                            duration: 2000,
+                            duration: 2500,
                             easing: 'easeOutExpo',
                             update: function() {
                                 let display = Math.round(obj.val);
                                 if (text.includes('-')) {
-                                    display = display + '-' + (display === 50 ? '80' : '');
+                                    display = display + '-' + (display === 60 ? '100' : '');
                                 }
                                 if (hasPercent) display += '%';
                                 if (hasPlus) display += '+';
