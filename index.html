@@ -682,6 +682,175 @@
             line-height: 1.6;
         }
 
+/* ─────────────────────────────────
+           Guidance (Confused) Section
+        ───────────────────────────────── */
+        .guidance-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 4rem 5%;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-radius: 24px;
+            color: white;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(30, 64, 175, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+        .guidance-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        .guidance-section p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* ─────────────────────────────────
+           Subscriptions / Pricing Section
+        ───────────────────────────────── */
+        .pricing-section {
+            padding: 6rem 5%;
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(135deg, #ffffff 0%, #f8faff 100%);
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 3rem;
+            max-width: 900px;
+            margin: 4rem auto 0;
+        }
+        .pricing-card {
+            background: white;
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(30, 64, 175, 0.12);
+            border-color: #1e40af;
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        .pricing-price {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #111827;
+            margin: 1.5rem 0;
+        }
+        .pricing-price span {
+            font-size: 1.2rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2.5rem;
+            flex-grow: 1;
+        }
+        .pricing-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+        .pricing-features li::before {
+            content: '✓';
+            color: #1e40af;
+            font-weight: bold;
+        }
+
+        /* Toggle Switch Styles */
+        .billing-toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #1e40af;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: #ea580c;
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        .toggle-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6b7280;
+            transition: color 0.3s;
+        }
+        .save-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            vertical-align: middle;
+            font-weight: 700;
+        }
+        .billed-yearly {
+            font-size: 0.9rem;
+            color: #9ca3af;
+            font-weight: 500;
+            margin-top: -5px;
+            letter-spacing: 0.5px;
+        }
+
+
+
         /* ─────────────────────────────────
            Parents Section
         ───────────────────────────────── */
@@ -1153,6 +1322,13 @@
         </div>
     </section>
 
+    <!-- Guidance Section -->
+    <div class="guidance-section" id="start-guide">
+        <h2>Confused where to start?</h2>
+        <p>The journey to Europe can feel overwhelming. If you're not sure which country fits you, what your budget should be, or how to translate your high school grades, you are not alone. Take our quick 3-minute placement quiz, and we'll generate a personalized roadmap showing exactly what your first 3 steps should be.</p>
+        <a href="confusion.html" class="cta-button orange" style="background: white; color: #ea580c;">Take the Placement Quiz</a>
+    </div>
+
     <!-- Parents Section -->
     <section class="parents-section">
         <div class="parents-inner">
@@ -1234,6 +1410,68 @@
     </section>
     <!-- End Parents Section -->
 
+    <!-- Subscriptions Section -->
+    <section class="pricing-section">
+        <h2 class="section-title">Choose Your Magellan Plan</h2>
+        <p class="section-subtitle">Whether you're planning your big move across the Atlantic or you're already here looking for the best events, we've got you covered.</p>
+        
+        <!-- Billing Toggle Switch -->
+        <div class="billing-toggle-container">
+            <span class="toggle-label" id="label-monthly" style="color: #1e40af;">Monthly</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="billing-toggle">
+                <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label" id="label-yearly">Yearly <span class="save-badge">Save 20%</span></span>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- Plan 1: US to Europe -->
+            <div class="pricing-card">
+                <h3>The Relocator</h3>
+                <p style="color: #6b7280;">For US students planning their move to Europe.</p>
+                
+                <!-- Dynamic Pricing Text -->
+                <div class="pricing-price monthly-price">$19<span>/mo</span></div>
+                <div class="pricing-price yearly-price" style="display: none;">
+                    $15<span>/mo</span>
+                    <div class="billed-yearly">Billed $180 annually</div>
+                </div>
+
+                <ul class="pricing-features">
+                    <li>Database of 1,800+ European universities</li>
+                    <li>Step-by-step visa & document checklists</li>
+                    <li>Cost-of-living & financial planners</li>
+                    <li>1-on-1 application review & guidance</li>
+                    <li>Parent portal with relocation resources</li>
+                </ul>
+                <a href="checkout-relocator.html" class="cta-button outline" style="text-align: center; width: 100%;">Start Planning</a>
+            </div>
+
+            <!-- Plan 2: Already in Europe -->
+            <div class="pricing-card">
+                <h3>The Euro-Local</h3>
+                <p style="color: #6b7280;">For students already in Europe looking to connect.</p>
+                
+                <!-- Dynamic Pricing Text -->
+                <div class="pricing-price monthly-price">$9<span>/mo</span></div>
+                <div class="pricing-price yearly-price" style="display: none;">
+                    $7<span>/mo</span>
+                    <div class="billed-yearly">Billed $84 annually</div>
+                </div>
+
+                <ul class="pricing-features">
+                    <li>Exclusive access to local student events</li>
+                    <li>Weekend travel guides & student discounts</li>
+                    <li>Interest-based meetup groups</li>
+                    <li>City-specific housing & roommate finder</li>
+                    <li>Direct messaging with nearby students</li>
+                </ul>
+                <a href="checkout-local.html" class="cta-button outline" style="text-align: center; width: 100%;">Join the Community</a>
+            </div>
+        </div>
+    </section>
+
     <section class="cta-section">
         <h2>Your Future College Awaits...</h2>
         <p>Join hundreds of students who have successfully moved abroad with Magellan's guidance.</p>
@@ -1299,7 +1537,7 @@
             });
         }, observerOptions);
 
-        document.querySelectorAll('.benefit-card, .step-card, .culture-card, .forum-card-sample').forEach(card => {
+        document.querySelectorAll('.benefit-card, .step-card, .culture-card, .forum-card-sample, .pricing-card, .guidance-section').forEach(card => {
             card.style.opacity = '0';
             observer.observe(card);
         });
@@ -1477,6 +1715,31 @@
                 easing: 'easeOutExpo'
             });
         });
+
+        // Billing Toggle Logic
+        const billingToggle = document.getElementById('billing-toggle');
+        const monthlyPrices = document.querySelectorAll('.monthly-price');
+        const yearlyPrices = document.querySelectorAll('.yearly-price');
+        const labelMonthly = document.getElementById('label-monthly');
+        const labelYearly = document.getElementById('label-yearly');
+
+        if (billingToggle) {
+            billingToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    // Switch to Yearly
+                    monthlyPrices.forEach(el => el.style.display = 'none');
+                    yearlyPrices.forEach(el => el.style.display = 'block');
+                    labelYearly.style.color = '#ea580c'; // Highlight Yearly label
+                    labelMonthly.style.color = '#6b7280'; // Dim Monthly label
+                } else {
+                    // Switch to Monthly
+                    monthlyPrices.forEach(el => el.style.display = 'block');
+                    yearlyPrices.forEach(el => el.style.display = 'none');
+                    labelMonthly.style.color = '#1e40af'; // Highlight Monthly label
+                    labelYearly.style.color = '#6b7280'; // Dim Yearly label
+                }
+            });
+        }
     </script>
 </body>
 </html>
