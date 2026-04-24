@@ -1,1134 +1,754 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Magellan – University Explorer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    /* ── Reset & Variables ─────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Database - Magellan</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <!-- Link your data.js file here -->
+    <script src="data.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    :root {
-      --navy:   #0a1628;
-      --dark:   #060e1a;
-      --mid:    #1a3a6e;
-      --accent: #ff7a1a;
-      --gold:   #ff9a45;
-      --teal:   #3b82f6;
-      --white:  #f0f6ff;
-      --muted:  #7a95bb;
-      --card-bg:#0f1f38;
-      --border: rgba(59,130,246,0.12);
-      --radius: 14px;
-      --shadow: 0 8px 32px rgba(0,0,0,0.55);
-    }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 50%, #fff5f0 100%);
+            color: #333;
+            min-height: 100vh;
+        }
 
-    html { scroll-behavior: smooth; }
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    body {
-      background: var(--navy);
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+        .logo {
+            font-family: 'Playfair Display', 'Georgia', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e40af;
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
 
-    /* ── Starfield background ──────────────────────────── */
-    body::before {
-      content: '';
-      position: fixed; inset: 0; z-index: 0;
-      background:
-        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(26,58,110,0.55) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(255,122,26,0.07) 0%, transparent 55%);
-      pointer-events: none;
-    }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
 
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
 
+        .page-header h1 {
+            font-size: 3.5rem;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #1e40af, #3b82f6, #ea580c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    /* ── Hero / Header ─────────────────────────────────── */
-    .page-hero {
-      position: relative; z-index: 1;
-      text-align: center;
-      padding: 72px 20px 48px;
-    }
+        .page-header p {
+            font-size: 1.3rem;
+            color: #4b5563;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-    .page-hero .eyebrow {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
+        /* Search and Filters */
+        .controls {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+        }
 
-    .page-hero h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      font-weight: 700;
-      line-height: 1.15;
-      margin-bottom: 16px;
-    }
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
 
-    .page-hero p {
-      font-size: 1rem;
-      color: var(--muted);
-      max-width: 520px;
-      margin: 0 auto 36px;
-      line-height: 1.7;
-    }
+        .search-box input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
 
-    /* ── Search + Filters ──────────────────────────────── */
-    .controls {
-      position: relative; z-index: 1;
-      max-width: 900px;
-      margin: 0 auto 48px;
-      padding: 0 20px;
-      display: flex; flex-direction: column; gap: 12px;
-    }
+        .search-box input:focus {
+            outline: none;
+            border-color: #1e40af;
+        }
 
-    .search-wrap {
-      width: 100%;
-      position: relative;
-    }
+        .search-icon {
+            position: absolute;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 1.2rem;
+        }
 
-    .filter-row {
-      display: flex; flex-wrap: wrap; gap: 10px;
-    }
+        .filters {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
 
-    .search-wrap svg {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      color: var(--muted); pointer-events: none;
-    }
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            background: white;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #4b5563;
+        }
 
-    .search-wrap input {
-      width: 100%;
-      padding: 12px 16px 12px 42px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.9rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-wrap input::placeholder { color: var(--muted); }
-    .search-wrap input:focus { border-color: var(--teal); }
+        .filter-btn:hover, .filter-btn.active {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-color: #1e40af;
+            color: white;
+        }
 
-    .filter-btn {
-      padding: 11px 18px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      color: var(--muted);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--mid);
-      border-color: var(--teal);
-      color: var(--white);
-    }
+        .result-count {
+            font-size: 1rem;
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
 
-    /* ── Grid ──────────────────────────────────────────── */
-    .grid-wrap {
-      position: relative; z-index: 1;
-      max-width: 1160px;
-      margin: 0 auto;
-      padding: 0 20px 80px;
-    }
+        /* University Grid */
+        .university-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
 
-    .result-count {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 20px;
-      font-weight: 500;
-    }
+        .university-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .university-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-    }
+        .university-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(30, 64, 175, 0.15);
+            border-color: #1e40af;
+        }
 
-    /* ── Card ──────────────────────────────────────────── */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-      animation: fadeUp 0.4s ease both;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow);
-      border-color: rgba(59,130,246,0.35);
-    }
+        .card-header {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            padding: 1.5rem;
+            color: white;
+        }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+        .card-country {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
 
-    .card-banner {
-      height: 90px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2.8rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .card-banner::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, rgba(22,35,54,0.9));
-    }
+        .card-type {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+        }
 
-    .card-body { padding: 18px 20px 20px; }
+        .card-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
 
-    .card-country {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 5px;
-    }
+        .card-location {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
 
-    .card-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.12rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-      line-height: 1.25;
-    }
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .card-city {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
+        .card-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
 
-    .card-pills {
-      display: flex; flex-wrap: wrap; gap: 7px;
-      margin-bottom: 16px;
-    }
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
 
-    .pill {
-      font-size: 0.72rem;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 20px;
-      background: rgba(59,130,246,0.12);
-      color: #60a5fa;
-      border: 1px solid rgba(59,130,246,0.25);
-    }
-    .pill.gold {
-      background: rgba(255,122,26,0.12);
-      color: var(--accent);
-      border-color: rgba(255,122,26,0.25);
-    }
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
-    .card-stats {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-    }
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
 
-    .stat-item { display: flex; flex-direction: column; gap: 2px; }
-    .stat-label { font-size: 0.68rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; }
-    .stat-value { font-size: 0.92rem; font-weight: 600; color: var(--white); }
+        .card-programs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: auto;
+            margin-bottom: 1rem;
+        }
 
-    .card-rating {
-      display: flex; align-items: center; gap: 6px;
-      margin-top: 14px;
-    }
+        .program-tag {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: #f0f9ff;
+            color: #1e40af;
+            border-radius: 20px;
+            border: 1px solid #dbeafe;
+        }
 
-    .stars { display: flex; gap: 2px; }
-    .star { font-size: 0.75rem; }
+        .card-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
 
-    .rating-label { font-size: 0.78rem; color: var(--muted); }
+        .stars {
+            display: flex;
+            gap: 2px;
+        }
 
-    /* ── Modal Overlay ─────────────────────────────────── */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 999;
-      background: rgba(5,12,22,0.85);
-      backdrop-filter: blur(8px);
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 24px 16px 40px;
-      overflow-y: auto;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-    .modal-overlay.open {
-      opacity: 1; pointer-events: all;
-    }
+        .star {
+            color: #fbbf24;
+            font-size: 1rem;
+        }
 
-    .modal {
-      background: #0f1e30;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      width: 100%; max-width: 720px;
-      overflow: hidden;
-      transform: translateY(30px) scale(0.97);
-      transition: transform 0.3s ease;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
-    }
-    .modal-overlay.open .modal {
-      transform: translateY(0) scale(1);
-    }
+        .rating-value {
+            font-weight: 700;
+            color: #4b5563;
+        }
 
-    /* Modal Header */
-    .modal-header {
-      height: 180px;
-      display: flex; align-items: flex-end;
-      padding: 24px 28px;
-      position: relative;
-      overflow: hidden;
-    }
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 2rem;
+            overflow-y: auto;
+        }
 
-    .modal-header-emoji {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -55%);
-      font-size: 5rem;
-      opacity: 0.35;
-      pointer-events: none;
-    }
+        .modal-overlay.active {
+            display: flex;
+        }
 
-    .modal-header-content { position: relative; z-index: 1; }
+        .modal {
+            background: white;
+            border-radius: 25px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
 
-    .modal-country-badge {
-      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
-      color: #60a5fa; margin-bottom: 6px; display: block;
-    }
+        .modal-header {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            padding: 2.5rem;
+            color: white;
+            position: relative;
+        }
 
-    .modal-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.65rem;
-      font-weight: 700;
-      line-height: 1.2;
-    }
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
 
-    .modal-subtitle {
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.6);
-      margin-top: 4px;
-    }
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
 
-    .modal-close {
-      position: absolute; top: 16px; right: 18px;
-      background: rgba(255,255,255,0.1);
-      border: none; border-radius: 50%;
-      width: 36px; height: 36px;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: var(--white);
-      transition: background 0.2s;
-      font-size: 1.1rem;
-    }
-    .modal-close:hover { background: rgba(255,255,255,0.18); }
+        .modal-country-badge {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
 
-    /* Modal Body */
-    .modal-body { padding: 28px; }
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
 
-    /* Overall rating row */
-    .modal-rating-row {
-      display: flex; align-items: center; gap: 20px;
-      padding: 16px 20px;
-      background: rgba(59,130,246,0.07);
-      border: 1px solid rgba(59,130,246,0.18);
-      border-radius: 12px;
-      margin-bottom: 28px;
-      flex-wrap: wrap; gap: 12px;
-    }
+        .modal-location {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
 
-    .big-score {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-    }
+        .modal-type-tag {
+            display: inline-block;
+            background: white;
+            color: #1e40af;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
 
-    .rating-breakdown { flex: 1; min-width: 140px; }
-    .rating-breakdown .score-label {
-      font-size: 0.78rem; color: var(--muted); font-weight: 500; margin-bottom: 4px;
-    }
-    .rating-breakdown .score-stars { display: flex; gap: 3px; font-size: 1rem; }
+        .modal-body {
+            padding: 2.5rem;
+        }
 
-    .rating-tags { display: flex; flex-wrap: wrap; gap: 7px; }
-    .tag {
-      font-size: 0.72rem; font-weight: 600; padding: 4px 11px;
-      border-radius: 20px;
-    }
-    .tag-green { background: rgba(74,222,128,0.12); color: #4ade80; }
-    .tag-blue  { background: rgba(96,165,250,0.12); color: #60a5fa; }
-    .tag-amber { background: rgba(251,191,36,0.12);  color: #fbbf24; }
+        .modal-description {
+            font-size: 1.05rem;
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-    /* Section */
-    .modal-section { margin-bottom: 26px; }
-    .section-title {
-      font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
-      letter-spacing: 0.14em; color: var(--muted); margin-bottom: 14px;
-      border-bottom: 1px solid var(--border); padding-bottom: 8px;
-    }
+        .modal-section {
+            margin-bottom: 2rem;
+        }
 
-    /* Stats grid */
-    .stats-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 12px;
-    }
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e7eb;
+        }
 
-    .stat-box {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-    .stat-box .s-label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
-    .stat-box .s-value { font-size: 1.1rem; font-weight: 600; }
-    .stat-box .s-value.accent { color: var(--accent); }
-    .stat-box .s-value.teal   { color: #60a5fa; }
-    .stat-box .s-value.gold   { color: var(--gold); }
+        .modal-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
 
-    /* Category ratings */
-    .cat-ratings { display: flex; flex-direction: column; gap: 11px; }
+        .modal-stat-box {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
 
-    .cat-row { display: flex; align-items: center; gap: 12px; }
-    .cat-name { font-size: 0.82rem; font-weight: 500; min-width: 130px; }
-    .bar-track {
-      flex: 1; height: 7px; background: rgba(255,255,255,0.08);
-      border-radius: 99px; overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%; border-radius: 99px;
-      background: linear-gradient(to right, var(--teal), var(--accent));
-      transition: width 0.6s ease 0.1s;
-    }
-    .cat-score { font-size: 0.82rem; font-weight: 600; min-width: 28px; text-align: right; }
+        .modal-stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
 
-    /* Programs list */
-    .programs-list {
-      display: flex; flex-wrap: wrap; gap: 8px;
-    }
-    .prog-tag {
-      font-size: 0.78rem; font-weight: 500; padding: 5px 14px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid var(--border);
-      color: var(--white);
-    }
+        .modal-stat-value {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
 
-    /* Description */
-    .modal-desc {
-      font-size: 0.9rem; line-height: 1.75; color: rgba(255,255,255,0.72);
-    }
+        .modal-programs-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
 
-    /* CTA */
-    .modal-cta {
-      display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap;
-    }
+        .modal-program-tag {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: #f0f9ff;
+            color: #1e40af;
+            border-radius: 20px;
+            border: 1px solid #dbeafe;
+        }
 
-    .btn-primary {
-      flex: 1; min-width: 140px;
-      padding: 13px 24px;
-      background: var(--accent);
-      color: #fff;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.88rem; font-weight: 700;
-      border: none; border-radius: 10px;
-      cursor: pointer; text-align: center;
-      transition: filter 0.2s, transform 0.15s;
-      text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
-    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .modal-employer-tag {
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            background: #fff5f0;
+            color: #ea580c;
+            border-radius: 20px;
+            border: 1px solid #fed7aa;
+        }
 
-    .btn-secondary {
-      flex: 1; min-width: 140px;
-      padding: 13px 24px;
-      background: transparent;
-      color: var(--white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.88rem; font-weight: 600;
-      border: 1px solid var(--border); border-radius: 10px;
-      cursor: pointer; text-align: center;
-      transition: border-color 0.2s, background 0.2s;
-      text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;
-    }
-    .btn-secondary:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.04); }
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #6b7280;
+            display: none;
+        }
 
-    /* No results */
-    .no-results {
-      text-align: center; padding: 60px 20px; color: var(--muted);
-      display: none;
-    }
-    .no-results.show { display: block; }
-    .no-results p { font-size: 0.95rem; margin-top: 8px; }
-  </style>
+        .no-results.show {
+            display: block;
+        }
+
+        .no-results-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .university-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal {
+                margin: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <a href="index.html" class="logo">MAGELLAN</a>
+        <nav>
+            <a href="search.html" style="text-decoration: none; color: #1e40af; font-weight: 600;">Find Universities</a>
+        </nav>
+    </header>
 
+    <div class="container">
+        <div class="page-header">
+            <h1>University Database</h1>
+            <p>Browse our comprehensive database of European universities with detailed information on tuition, acceptance rates, programs, and career outcomes.</p>
+        </div>
 
+        <div class="controls">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search universities, cities, or programs...">
+            </div>
 
-<!-- Hero -->
-<div class="page-hero">
-  <span class="eyebrow">✦ Explore Europe</span>
-  <h1>12+ Universities, One Platform</h1>
-  <p>Browse every institution in our database. Click any card to dive deep into rankings, tuition, programs, and student life.</p>
-</div>
+            <div class="filters" id="filters">
+                <button class="filter-btn active" data-country="all">All Countries</button>
+                <button class="filter-btn" data-country="Germany">Germany</button>
+                <button class="filter-btn" data-country="Ireland">Ireland</button>
+                <button class="filter-btn" data-country="Austria">Austria</button>
+            </div>
+        </div>
 
-<!-- Controls -->
-<div class="controls">
-  <div class="search-wrap">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="searchInput" placeholder="Search universities or cities…" />
-  </div>
-  <div class="filter-row">
-    <button class="filter-btn active" data-filter="all">All Countries</button>
-    <button class="filter-btn" data-filter="Germany">Germany</button>
-    <button class="filter-btn" data-filter="Netherlands">Netherlands</button>
-    <button class="filter-btn" data-filter="Spain">Spain</button>
-    <button class="filter-btn" data-filter="France">France</button>
-    <button class="filter-btn" data-filter="Italy">Italy</button>
-  </div>
-</div>
+        <div class="result-count" id="resultCount">Showing 0 universities</div>
 
-<!-- Grid -->
-<div class="grid-wrap">
-  <p class="result-count" id="resultCount">Showing 12 universities</p>
-  <div class="university-grid" id="uniGrid"></div>
-  <div class="no-results" id="noResults">
-    <span style="font-size:2rem">🔭</span>
-    <p>No universities found. Try a different search.</p>
-  </div>
-</div>
+        <div class="university-grid" id="universityGrid"></div>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="modal">
-    <div class="modal-header" id="modalHeader">
-      <div class="modal-header-emoji" id="modalEmoji"></div>
-      <div class="modal-header-content">
-        <span class="modal-country-badge" id="modalCountry"></span>
-        <div class="modal-title" id="modalTitle"></div>
-        <div class="modal-subtitle" id="modalCity"></div>
-      </div>
-      <button class="modal-close" id="modalClose">✕</button>
+        <div class="no-results" id="noResults">
+            <div class="no-results-icon">🔭</div>
+            <h3>No universities found</h3>
+            <p>Try adjusting your search or filters</p>
+        </div>
     </div>
 
-    <div class="modal-body">
-      <!-- Rating row -->
-      <div class="modal-rating-row">
-        <div class="big-score" id="modalScore"></div>
-        <div class="rating-breakdown">
-          <div class="score-label">Overall Rating</div>
-          <div class="score-stars" id="modalStars"></div>
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <button class="modal-close" id="modalClose">×</button>
+                <div class="modal-country-badge" id="modalCountry"></div>
+                <div class="modal-title" id="modalTitle"></div>
+                <div class="modal-location" id="modalLocation"></div>
+                <div class="modal-type-tag" id="modalType"></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-description" id="modalDescription"></div>
+                
+                <div class="modal-section">
+                    <div class="section-title">Key Statistics</div>
+                    <div class="modal-stats-grid" id="modalStats"></div>
+                </div>
+
+                <div class="modal-section">
+                    <div class="section-title">Notable Programs</div>
+                    <div class="modal-programs-list" id="modalPrograms"></div>
+                </div>
+
+                <div class="modal-section">
+                    <div class="section-title">Top Employers of Alumni</div>
+                    <div class="modal-programs-list" id="modalEmployers"></div>
+                </div>
+            </div>
         </div>
-        <div class="rating-tags" id="modalTags"></div>
-      </div>
-
-      <!-- Description -->
-      <div class="modal-section">
-        <div class="section-title">About</div>
-        <p class="modal-desc" id="modalDesc"></p>
-      </div>
-
-      <!-- Quick stats -->
-      <div class="modal-section">
-        <div class="section-title">Key Stats</div>
-        <div class="stats-grid" id="modalStats"></div>
-      </div>
-
-      <!-- Category ratings -->
-      <div class="modal-section">
-        <div class="section-title">Category Ratings</div>
-        <div class="cat-ratings" id="modalCatRatings"></div>
-      </div>
-
-      <!-- Programs -->
-      <div class="modal-section">
-        <div class="section-title">Notable Programs</div>
-        <div class="programs-list" id="modalPrograms"></div>
-      </div>
-
-      <!-- CTA buttons -->
-      <div class="modal-cta">
-        <a class="btn-primary" href="https://aryankothari4.github.io/Magellan/search.html" target="_blank">
-          🔍 Find Similar Universities
-        </a>
-        <button class="btn-secondary" id="modalForumBtn">
-          💬 Discuss in Forum
-        </button>
-      </div>
     </div>
-  </div>
-</div>
 
-<script>
-const universities = [
-  {
-    id: 1,
-    name: "Freie Universität Berlin",
-    city: "Berlin, Germany",
-    country: "Germany",
-    emoji: "🦅",
-    gradient: "linear-gradient(135deg,#1a3a5c,#0d2137)",
-    score: "4.6",
-    pills: ["Research-Intensive","#1 in Germany"],
-    pillsGold: ["Free Tuition"],
-    tags: [
-      { label: "Free Tuition", type: "tag-green" },
-      { label: "English Programs", type: "tag-blue" },
-      { label: "Top 100 QS", type: "tag-amber" }
-    ],
-    desc: "One of Germany's top research universities, Freie Universität offers a dynamic academic environment in one of Europe's most culturally vibrant capitals. The campus sprawls across the Dahlem district, hosting over 35,000 students from 130+ countries. Tuition is essentially free for all students, including international applicants.",
-    stats: [
-      { label: "Annual Tuition", value: "~€350", color: "teal" },
-      { label: "Acceptance Rate", value: "45%", color: "" },
-      { label: "Students", value: "35,000+", color: "" },
-      { label: "QS World Rank", value: "#98", color: "accent" },
-      { label: "English Programs", value: "120+", color: "" },
-      { label: "City Cost/mo", value: "$1,200", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.7 },
-      { name: "Student Life", score: 4.2 },
-      { name: "Affordability", score: 4.9 },
-      { name: "Career Outcomes", score: 4.3 },
-      { name: "City & Location", score: 4.8 },
-    ],
-    programs: ["Political Science","History","Biology","Law","Psychology","Business","Physics","Computer Science"]
-  },
-  {
-    id: 2,
-    name: "University of Amsterdam",
-    city: "Amsterdam, Netherlands",
-    country: "Netherlands",
-    emoji: "🌷",
-    gradient: "linear-gradient(135deg,#1c3b2e,#0f2318)",
-    score: "4.5",
-    pills: ["Highly International","Liberal Arts"],
-    pillsGold: ["English-Taught"],
-    tags: [
-      { label: "English-Taught", type: "tag-blue" },
-      { label: "Top 60 QS", type: "tag-amber" },
-      { label: "Semester Exchange", type: "tag-green" }
-    ],
-    desc: "Nestled in the heart of one of Europe's most livable cities, the University of Amsterdam blends rigorous academics with a uniquely open, international culture. With over 30,000 students from 100+ countries, UvA is consistently ranked among Europe's best, and virtually every bachelor's program in the humanities and social sciences is available in English.",
-    stats: [
-      { label: "Annual Tuition", value: "€2,314", color: "teal" },
-      { label: "Acceptance Rate", value: "50%", color: "" },
-      { label: "Students", value: "30,000+", color: "" },
-      { label: "QS World Rank", value: "#55", color: "accent" },
-      { label: "English Programs", value: "200+", color: "" },
-      { label: "City Cost/mo", value: "$1,600", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.5 },
-      { name: "Student Life", score: 4.6 },
-      { name: "Affordability", score: 3.9 },
-      { name: "Career Outcomes", score: 4.4 },
-      { name: "City & Location", score: 4.9 },
-    ],
-    programs: ["Economics","Law","Psychology","Media Studies","International Relations","AI","Pharmacy","Business"]
-  },
-  {
-    id: 3,
-    name: "TU München",
-    city: "Munich, Germany",
-    country: "Germany",
-    emoji: "⚙️",
-    gradient: "linear-gradient(135deg,#2a1f3d,#16102a)",
-    score: "4.7",
-    pills: ["Engineering Hub","Top-Ranked STEM"],
-    pillsGold: ["Free Tuition"],
-    tags: [
-      { label: "Free Tuition", type: "tag-green" },
-      { label: "STEM Powerhouse", type: "tag-amber" },
-      { label: "#1 Engineering DE", type: "tag-blue" },
-    ],
-    desc: "Technische Universität München is Germany's premier technical university and one of Europe's leading research institutions. Located in Munich, one of Germany's wealthiest and most beautiful cities, TUM boasts deep industry ties with BMW, Siemens, and MAN — making it a launchpad for engineering and entrepreneurship careers.",
-    stats: [
-      { label: "Annual Tuition", value: "~€350", color: "teal" },
-      { label: "Acceptance Rate", value: "35%", color: "" },
-      { label: "Students", value: "40,000+", color: "" },
-      { label: "QS World Rank", value: "#37", color: "accent" },
-      { label: "English Programs", value: "80+", color: "" },
-      { label: "City Cost/mo", value: "$1,400", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.9 },
-      { name: "Student Life", score: 4.0 },
-      { name: "Affordability", score: 4.8 },
-      { name: "Career Outcomes", score: 4.8 },
-      { name: "City & Location", score: 4.5 },
-    ],
-    programs: ["Mechanical Engineering","Computer Science","Aerospace","Data Science","Architecture","Physics","Robotics","Business & Technology"]
-  },
-  {
-    id: 4,
-    name: "ESADE Business School",
-    city: "Barcelona, Spain",
-    country: "Spain",
-    emoji: "🏖️",
-    gradient: "linear-gradient(135deg,#3a1c1c,#220e0e)",
-    score: "4.4",
-    pills: ["Business Elite","Jesuit Heritage"],
-    pillsGold: ["FT Top 10 MiM"],
-    tags: [
-      { label: "FT Top 10 MiM", type: "tag-amber" },
-      { label: "English-Taught", type: "tag-blue" },
-      { label: "Barcelona", type: "tag-green" }
-    ],
-    desc: "ESADE is one of Europe's most prestigious business and law schools, consistently ranked in the Financial Times top 10 for its Master in Management. Set in Barcelona — a global hub for design, startups, and culture — ESADE offers a uniquely cosmopolitan student experience alongside rigorous academic preparation.",
-    stats: [
-      { label: "Annual Tuition", value: "€14,800", color: "accent" },
-      { label: "Acceptance Rate", value: "30%", color: "" },
-      { label: "Students", value: "4,500", color: "" },
-      { label: "FT MiM Rank", value: "#8", color: "accent" },
-      { label: "English Programs", value: "Full", color: "" },
-      { label: "City Cost/mo", value: "$1,100", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.6 },
-      { name: "Student Life", score: 4.7 },
-      { name: "Affordability", score: 3.2 },
-      { name: "Career Outcomes", score: 4.7 },
-      { name: "City & Location", score: 4.9 },
-    ],
-    programs: ["Business Administration","Law","MiM","MBA","Data Management","Marketing","Strategy","Finance"]
-  },
-  {
-    id: 5,
-    name: "Sciences Po Paris",
-    city: "Paris, France",
-    country: "France",
-    emoji: "🗼",
-    gradient: "linear-gradient(135deg,#1a1f3a,#0d1025)",
-    score: "4.5",
-    pills: ["Politics & IR","Grandes Écoles"],
-    pillsGold: ["World Leaders Alumni"],
-    tags: [
-      { label: "Dual Degrees", type: "tag-blue" },
-      { label: "English Programs", type: "tag-green" },
-      { label: "Elite Network", type: "tag-amber" }
-    ],
-    desc: "Sciences Po is among the world's most selective and prestigious institutions for political science, international affairs, and social sciences. Alumni include multiple French presidents and Nobel laureates. Its Paris campus is flanked by the Musée d'Orsay — and the entire city is your classroom for history, politics, and culture.",
-    stats: [
-      { label: "Annual Tuition", value: "€500–13K", color: "teal" },
-      { label: "Acceptance Rate", value: "20%", color: "" },
-      { label: "Students", value: "14,000", color: "" },
-      { label: "QS Rank (SS)", value: "#12", color: "accent" },
-      { label: "English Programs", value: "Many", color: "" },
-      { label: "City Cost/mo", value: "$1,700", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.8 },
-      { name: "Student Life", score: 4.3 },
-      { name: "Affordability", score: 4.0 },
-      { name: "Career Outcomes", score: 4.8 },
-      { name: "City & Location", score: 5.0 },
-    ],
-    programs: ["Political Science","International Affairs","Sociology","Law","Economics","History","Journalism","Public Policy"]
-  },
-  {
-    id: 6,
-    name: "Bocconi University",
-    city: "Milan, Italy",
-    country: "Italy",
-    emoji: "👔",
-    gradient: "linear-gradient(135deg,#1f2a1a,#101811)",
-    score: "4.6",
-    pills: ["Finance & Economics","Fashion Capital"],
-    pillsGold: ["FT Top 5 Mgmt"],
-    tags: [
-      { label: "FT Top 5 Mgmt", type: "tag-amber" },
-      { label: "Full English Option", type: "tag-blue" },
-      { label: "Milan", type: "tag-green" }
-    ],
-    desc: "Bocconi is Italy's most prestigious private university and a genuine powerhouse for economics, management, and finance. Located in Milan — Italy's financial capital and the global epicenter of fashion — Bocconi graduates are among the most hired in Europe. Its CEMS partnership gives students access to 34 of the world's best business schools.",
-    stats: [
-      { label: "Annual Tuition", value: "€5,000–14K", color: "accent" },
-      { label: "Acceptance Rate", value: "25%", color: "" },
-      { label: "Students", value: "15,000+", color: "" },
-      { label: "FT Mgmt Rank", value: "#4", color: "accent" },
-      { label: "English Programs", value: "Full", color: "" },
-      { label: "City Cost/mo", value: "$1,300", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.7 },
-      { name: "Student Life", score: 4.4 },
-      { name: "Affordability", score: 3.4 },
-      { name: "Career Outcomes", score: 4.9 },
-      { name: "City & Location", score: 4.7 },
-    ],
-    programs: ["Economics","Finance","Management","Law","Data Science","Marketing","Political Science","International Management"]
-  },
-  {
-    id: 7,
-    name: "Delft University of Technology",
-    city: "Delft, Netherlands",
-    country: "Netherlands",
-    emoji: "🚲",
-    gradient: "linear-gradient(135deg,#152535,#0a1520)",
-    score: "4.5",
-    pills: ["Engineering","Architecture"],
-    pillsGold: ["#1 Tech NL"],
-    tags: [
-      { label: "#1 Tech in NL", type: "tag-amber" },
-      { label: "English MSc", type: "tag-blue" },
-      { label: "Low Tuition", type: "tag-green" }
-    ],
-    desc: "TU Delft is the Netherlands' oldest and largest technical university, considered one of the top engineering schools in Europe. The campus is a city unto itself, and the surrounding city of Delft is one of the most charming in Europe — windmills, canals, and Delftware pottery. Strong ties to aerospace, architecture, and civil engineering industries.",
-    stats: [
-      { label: "Annual Tuition", value: "€2,314", color: "teal" },
-      { label: "Acceptance Rate", value: "40%", color: "" },
-      { label: "Students", value: "25,000+", color: "" },
-      { label: "QS World Rank", value: "#57", color: "accent" },
-      { label: "English Programs", value: "All MSc", color: "" },
-      { label: "City Cost/mo", value: "$1,350", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.6 },
-      { name: "Student Life", score: 4.0 },
-      { name: "Affordability", score: 4.4 },
-      { name: "Career Outcomes", score: 4.6 },
-      { name: "City & Location", score: 4.3 },
-    ],
-    programs: ["Aerospace Engineering","Architecture","Civil Engineering","Computer Science","Electrical Engineering","Industrial Design","Applied Physics","Marine Technology"]
-  },
-  {
-    id: 8,
-    name: "IE University",
-    city: "Madrid, Spain",
-    country: "Spain",
-    emoji: "🌞",
-    gradient: "linear-gradient(135deg,#2a1a10,#180e06)",
-    score: "4.3",
-    pills: ["Entrepreneurship","Tech & Innovation"],
-    pillsGold: ["Forbes Top 10 MiM"],
-    tags: [
-      { label: "Startup Culture", type: "tag-green" },
-      { label: "Full English", type: "tag-blue" },
-      { label: "Forbes Top 10", type: "tag-amber" }
-    ],
-    desc: "IE University sits at the intersection of business, technology, and design. Based in the heart of Madrid, one of Europe's most affordable and vibrant capitals, IE attracts hyper-diverse students and is renowned for its entrepreneurial culture — alumni have founded over 900 companies. The school's tech and innovation focus makes it a standout for ambitious students.",
-    stats: [
-      { label: "Annual Tuition", value: "€18,000", color: "accent" },
-      { label: "Acceptance Rate", value: "38%", color: "" },
-      { label: "Students", value: "12,000", color: "" },
-      { label: "Forbes MiM", value: "#9", color: "accent" },
-      { label: "English Programs", value: "Full", color: "" },
-      { label: "City Cost/mo", value: "$1,050", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.3 },
-      { name: "Student Life", score: 4.8 },
-      { name: "Affordability", score: 3.0 },
-      { name: "Career Outcomes", score: 4.5 },
-      { name: "City & Location", score: 4.8 },
-    ],
-    programs: ["Business Administration","International Relations","Architecture","Computer Science","Design","Data & Business Analytics","Law","Communication"]
-  },
-  {
-    id: 9,
-    name: "Humboldt-Universität zu Berlin",
-    city: "Berlin, Germany",
-    country: "Germany",
-    emoji: "📚",
-    gradient: "linear-gradient(135deg,#0e2a1f,#061812)",
-    score: "4.3",
-    pills: ["Research University","Founded 1810"],
-    pillsGold: ["Free Tuition"],
-    tags: [
-      { label: "Free Tuition", type: "tag-green" },
-      { label: "Historic", type: "tag-amber" },
-      { label: "Berlin", type: "tag-blue" }
-    ],
-    desc: "Founded in 1810 by Wilhelm von Humboldt, Humboldt University literally invented the modern research university model and has produced 57 Nobel laureates — more than Harvard. It sits on Unter den Linden boulevard in the center of Berlin, giving students access to the city's legendary nightlife, arts scene, and startup ecosystem, all while tuition stays near zero.",
-    stats: [
-      { label: "Annual Tuition", value: "~€350", color: "teal" },
-      { label: "Acceptance Rate", value: "55%", color: "" },
-      { label: "Students", value: "33,000+", color: "" },
-      { label: "Nobel Alumni", value: "57", color: "accent" },
-      { label: "English Programs", value: "60+", color: "" },
-      { label: "City Cost/mo", value: "$1,200", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.4 },
-      { name: "Student Life", score: 4.5 },
-      { name: "Affordability", score: 5.0 },
-      { name: "Career Outcomes", score: 4.0 },
-      { name: "City & Location", score: 4.8 },
-    ],
-    programs: ["Philosophy","Medicine","Law","Natural Sciences","Cultural Studies","Mathematics","History","Business & Economics"]
-  },
-  {
-    id: 10,
-    name: "Politecnico di Milano",
-    city: "Milan, Italy",
-    country: "Italy",
-    emoji: "🏛️",
-    gradient: "linear-gradient(135deg,#251520,#160b13)",
-    score: "4.5",
-    pills: ["Design & Engineering","QS Top 25 Design"],
-    pillsGold: ["#1 Design World"],
-    tags: [
-      { label: "#1 Design Globally", type: "tag-amber" },
-      { label: "English MSc", type: "tag-blue" },
-      { label: "Milan", type: "tag-green" }
-    ],
-    desc: "Politecnico di Milano is the world's top university for design and architecture according to the QS rankings. It's also Italy's top technical university for engineering. Located in Milan, students have unparalleled exposure to the fashion, product design, and manufacturing industries, with internship pipelines running directly into major firms.",
-    stats: [
-      { label: "Annual Tuition", value: "€3,000–4K", color: "teal" },
-      { label: "Acceptance Rate", value: "35%", color: "" },
-      { label: "Students", value: "43,000+", color: "" },
-      { label: "QS Design Rank", value: "#1", color: "accent" },
-      { label: "English Programs", value: "All MSc", color: "" },
-      { label: "City Cost/mo", value: "$1,300", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.7 },
-      { name: "Student Life", score: 4.2 },
-      { name: "Affordability", score: 4.3 },
-      { name: "Career Outcomes", score: 4.7 },
-      { name: "City & Location", score: 4.7 },
-    ],
-    programs: ["Architecture","Industrial Design","Engineering","Computer Science","Urban Planning","Fashion Design","Material Engineering","Communication Design"]
-  },
-  {
-    id: 11,
-    name: "Maastricht University",
-    city: "Maastricht, Netherlands",
-    country: "Netherlands",
-    emoji: "🧀",
-    gradient: "linear-gradient(135deg,#1a2a1a,#0f1a0f)",
-    score: "4.2",
-    pills: ["Problem-Based Learning","International"],
-    pillsGold: ["95% English Programs"],
-    tags: [
-      { label: "PBL Method", type: "tag-green" },
-      { label: "95% English", type: "tag-blue" },
-      { label: "EU Border City", type: "tag-amber" }
-    ],
-    desc: "Maastricht University is uniquely known for its Problem-Based Learning methodology — small group discussions instead of lectures, a style proven to develop critical thinking. One of the most international universities in Europe, over 50% of students come from abroad, and the city of Maastricht borders Belgium and Germany, making weekend trips incredibly easy.",
-    stats: [
-      { label: "Annual Tuition", value: "€2,314", color: "teal" },
-      { label: "Acceptance Rate", value: "60%", color: "" },
-      { label: "Students", value: "20,000+", color: "" },
-      { label: "Intl. Students", value: "50%+", color: "accent" },
-      { label: "English Programs", value: "95%", color: "" },
-      { label: "City Cost/mo", value: "$1,000", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.3 },
-      { name: "Student Life", score: 4.4 },
-      { name: "Affordability", score: 4.6 },
-      { name: "Career Outcomes", score: 4.1 },
-      { name: "City & Location", score: 4.2 },
-    ],
-    programs: ["Business","Law","Health Sciences","Arts & Culture","Psychology","Economics","European Studies","Data Science & AI"]
-  },
-  {
-    id: 12,
-    name: "Sorbonne Université",
-    city: "Paris, France",
-    country: "France",
-    emoji: "🎨",
-    gradient: "linear-gradient(135deg,#2a1a2a,#180e18)",
-    score: "4.4",
-    pills: ["Arts & Sciences","Founded 1253"],
-    pillsGold: ["Iconic Legacy"],
-    tags: [
-      { label: "Historic 1253", type: "tag-amber" },
-      { label: "Arts & Sciences", type: "tag-blue" },
-      { label: "Free/Low Tuition", type: "tag-green" }
-    ],
-    desc: "The Sorbonne is one of the world's oldest and most iconic universities, founded in 1253. Sitting in the Latin Quarter of Paris — surrounded by cafés, bookshops, and museums — it offers programs in sciences, humanities, medicine, and arts. French public university fees make this one of the most affordable elite options in the world.",
-    stats: [
-      { label: "Annual Tuition", value: "~€300–600", color: "teal" },
-      { label: "Acceptance Rate", value: "Open*", color: "" },
-      { label: "Students", value: "55,000+", color: "" },
-      { label: "QS World Rank", value: "#69", color: "accent" },
-      { label: "Founded", value: "1253", color: "" },
-      { label: "City Cost/mo", value: "$1,700", color: "gold" },
-    ],
-    categories: [
-      { name: "Academics", score: 4.5 },
-      { name: "Student Life", score: 4.4 },
-      { name: "Affordability", score: 4.9 },
-      { name: "Career Outcomes", score: 4.2 },
-      { name: "City & Location", score: 5.0 },
-    ],
-    programs: ["Literature","Medicine","Physics","Chemistry","History","Philosophy","Art History","Mathematics"]
-  },
-];
+    <script>
+        // DOM Elements
+        const grid = document.getElementById('universityGrid');
+        const resultCount = document.getElementById('resultCount');
+        const noResults = document.getElementById('noResults');
+        const searchInput = document.getElementById('searchInput');
+        const filterBtns = document.querySelectorAll('.filter-btn');
 
-// ── Render Cards ────────────────────────────────────────
-function starsHTML(score, size = '0.8rem') {
-  const full = Math.floor(score);
-  const half = score - full >= 0.5;
-  let html = '';
-  for (let i = 0; i < 5; i++) {
-    if (i < full) html += `<span class="star" style="font-size:${size};color:#ff7a1a">★</span>`;
-    else if (i === full && half) html += `<span class="star" style="font-size:${size};color:#ff7a1a">⯨</span>`;
-    else html += `<span class="star" style="font-size:${size};color:rgba(255,255,255,0.15)">★</span>`;
-  }
-  return html;
-}
+        // Modal Elements
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalClose = document.getElementById('modalClose');
+        const modalCountry = document.getElementById('modalCountry');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalLocation = document.getElementById('modalLocation');
+        const modalType = document.getElementById('modalType');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalStats = document.getElementById('modalStats');
+        const modalPrograms = document.getElementById('modalPrograms');
+        const modalEmployers = document.getElementById('modalEmployers');
 
-function renderCards(list) {
-  const grid = document.getElementById('uniGrid');
-  const countEl = document.getElementById('resultCount');
-  const noRes = document.getElementById('noResults');
+        // Helper: Generate Stars HTML
+        function generateStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            for (let i = 1; i <= 5; i++) {
+                if (i <= fullStars) {
+                    stars += '<span class="star">★</span>';
+                } else if (i === fullStars + 1 && rating % 1 !== 0) {
+                    stars += '<span class="star" style="opacity: 0.5;">★</span>';
+                } else {
+                    stars += '<span class="star" style="opacity: 0.2;">★</span>';
+                }
+            }
+            return `<div class="stars">${stars}</div><span class="rating-value">${rating.toFixed(1)}</span>`;
+        }
 
-  grid.innerHTML = '';
-  countEl.textContent = `Showing ${list.length} universit${list.length === 1 ? 'y' : 'ies'}`;
+        // Render Grid Function
+        function renderGrid(data) {
+            grid.innerHTML = '';
+            resultCount.textContent = `Showing ${data.length} universities`;
 
-  if (list.length === 0) {
-    noRes.classList.add('show');
-    return;
-  }
-  noRes.classList.remove('show');
+            if (data.length === 0) {
+                grid.style.display = 'none';
+                noResults.classList.add('show');
+                return;
+            }
 
-  list.forEach((u, i) => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.style.animationDelay = `${i * 0.06}s`;
+            grid.style.display = 'grid';
+            noResults.classList.remove('show');
 
-    const allPills = u.pills.map(p => `<span class="pill">${p}</span>`).join('');
-    const goldPills = u.pillsGold.map(p => `<span class="pill gold">${p}</span>`).join('');
+            data.forEach(college => {
+                const card = document.createElement('div');
+                card.className = 'university-card';
+                
+                // Handle program tags (show max 3, plus a counter for the rest)
+                const displayPrograms = college.programs.slice(0, 3);
+                const extraCount = college.programs.length > 3 ? college.programs.length - 3 : 0;
+                
+                let programsHTML = displayPrograms.map(p => `<span class="program-tag">${p}</span>`).join('');
+                if (extraCount > 0) {
+                    programsHTML += `<span class="program-tag">+${extraCount}</span>`;
+                }
 
-    card.innerHTML = `
-      <div class="card-banner" style="background:${u.gradient}">
-        <span style="position:relative;z-index:1;font-size:2.5rem">${u.emoji}</span>
-      </div>
-      <div class="card-body">
-        <div class="card-country">${u.country}</div>
-        <div class="card-name">${u.name}</div>
-        <div class="card-city">📍 ${u.city}</div>
-        <div class="card-pills">${allPills}${goldPills}</div>
-        <div class="card-stats">
-          <div class="stat-item">
-            <span class="stat-label">Tuition</span>
-            <span class="stat-value">${u.stats[0].value}</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Acceptance</span>
-            <span class="stat-value">${u.stats[1].value}</span>
-          </div>
-        </div>
-        <div class="card-rating">
-          <div class="stars">${starsHTML(parseFloat(u.score))}</div>
-          <span class="rating-label">${u.score} / 5.0</span>
-        </div>
-      </div>`;
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="card-country">
+                            ${college.country} 
+                            <span class="card-type">${college.type.split(' ').pop()}</span>
+                        </div>
+                        <div class="card-name">${college.name}</div>
+                        <div class="card-location">📍 ${college.city}, ${college.country}</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Tuition</span>
+                                <span class="stat-value">${college.tuition.split('/')[0]}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Acceptance</span>
+                                <span class="stat-value">${college.acceptanceRate}</span>
+                            </div>
+                        </div>
+                        <div class="card-programs">
+                            ${programsHTML}
+                        </div>
+                        <div class="card-rating">
+                            ${generateStars(college.rating)}
+                        </div>
+                    </div>
+                `;
+                
+                // Add click listener for modal
+                card.addEventListener('click', () => openModal(college));
+                grid.appendChild(card);
+            });
+        }
 
-    card.addEventListener('click', () => openModal(u));
-    grid.appendChild(card);
-  });
-}
+        // Filter Function
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCountry = document.querySelector('.filter-btn.active').dataset.country;
 
-// ── Open Modal ──────────────────────────────────────────
-function openModal(u) {
-  document.getElementById('modalEmoji').textContent = u.emoji;
-  document.getElementById('modalHeader').style.background = u.gradient;
-  document.getElementById('modalCountry').textContent = u.country;
-  document.getElementById('modalTitle').textContent = u.name;
-  document.getElementById('modalCity').textContent = '📍 ' + u.city;
-  document.getElementById('modalScore').textContent = u.score;
-  document.getElementById('modalStars').innerHTML = starsHTML(parseFloat(u.score), '1.1rem');
-  document.getElementById('modalDesc').textContent = u.desc;
+            // Notice we use the collegeData array imported from data.js
+            const filteredData = collegeData.filter(college => {
+                // Check Country
+                const matchCountry = activeCountry === 'all' || college.country === activeCountry;
+                
+                // Check Search Term
+                const matchSearch = college.name.toLowerCase().includes(searchTerm) || 
+                                    college.city.toLowerCase().includes(searchTerm) ||
+                                    college.programs.some(p => p.toLowerCase().includes(searchTerm));
+                
+                return matchCountry && matchSearch;
+            });
 
-  // Tags
-  const tagsEl = document.getElementById('modalTags');
-  tagsEl.innerHTML = u.tags.map(t => `<span class="tag ${t.type}">${t.label}</span>`).join('');
+            renderGrid(filteredData);
+        }
 
-  // Stats grid
-  const statsEl = document.getElementById('modalStats');
-  statsEl.innerHTML = u.stats.map(s => `
-    <div class="stat-box">
-      <div class="s-label">${s.label}</div>
-      <div class="s-value ${s.color ? s.color : ''}">${s.value}</div>
-    </div>`).join('');
+        // Event Listeners for Filters
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                applyFilters();
+            });
+        });
 
-  // Category bars (animate after DOM paint)
-  const catEl = document.getElementById('modalCatRatings');
-  catEl.innerHTML = u.categories.map(c => `
-    <div class="cat-row">
-      <span class="cat-name">${c.name}</span>
-      <div class="bar-track">
-        <div class="bar-fill" style="width:0%" data-target="${(c.score/5)*100}%"></div>
-      </div>
-      <span class="cat-score">${c.score}</span>
-    </div>`).join('');
+        searchInput.addEventListener('input', applyFilters);
 
-  // Programs
-  const progEl = document.getElementById('modalPrograms');
-  progEl.innerHTML = u.programs.map(p => `<span class="prog-tag">${p}</span>`).join('');
+        // Modal Functions
+        function openModal(college) {
+            modalCountry.textContent = college.country;
+            modalTitle.textContent = college.name;
+            modalLocation.textContent = `📍 ${college.city}, ${college.country}`;
+            modalType.textContent = college.type;
+            modalDescription.textContent = college.description;
 
-  const overlay = document.getElementById('modalOverlay');
-  overlay.scrollTop = 0;
-  overlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
+            modalStats.innerHTML = `
+                <div class="modal-stat-box">
+                    <div class="modal-stat-label">Founded</div>
+                    <div class="modal-stat-value">${college.founded}</div>
+                </div>
+                <div class="modal-stat-box">
+                    <div class="modal-stat-label">Language</div>
+                    <div class="modal-stat-value" style="font-size: 0.95rem;">${college.language}</div>
+                </div>
+                <div class="modal-stat-box">
+                    <div class="modal-stat-label">Intl Students</div>
+                    <div class="modal-stat-value">${college.intlStudents}</div>
+                </div>
+                <div class="modal-stat-box">
+                    <div class="modal-stat-label">Students</div>
+                    <div class="modal-stat-value">${college.students}</div>
+                </div>
+                <div class="modal-stat-box">
+                    <div class="modal-stat-label">Annual Tuition</div>
+                    <div class="modal-stat-value" style="font-size: 1rem;">${college.tuition}</div>
+                </div>
+                <div class="modal-stat-box">
+                    <div class="modal-stat-label">Acceptance Rate</div>
+                    <div class="modal-stat-value">${college.acceptanceRate}</div>
+                </div>
+                <div class="modal-stat-box">
+                    <div class="modal-stat-label">QS World Rank</div>
+                    <div class="modal-stat-value">${college.qsRank}</div>
+                </div>
+                <div class="modal-stat-box">
+                    <div class="modal-stat-label">City Cost / Mo</div>
+                    <div class="modal-stat-value">${college.monthlyCost}</div>
+                </div>
+            `;
 
-  // Trigger bar animations
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      catEl.querySelectorAll('.bar-fill').forEach(bar => {
-        bar.style.width = bar.dataset.target;
-      });
-    });
-  });
-}
+            modalPrograms.innerHTML = college.programs.map(p => 
+                `<span class="modal-program-tag">${p}</span>`
+            ).join('');
 
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
+            modalEmployers.innerHTML = college.topEmployers.map(e => 
+                `<span class="modal-employer-tag">${e}</span>`
+            ).join('');
 
-document.getElementById('modalClose').addEventListener('click', closeModal);
-document.getElementById('modalOverlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('modalOverlay')) closeModal();
-});
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
 
-// ── Filter & Search ─────────────────────────────────────
-let activeFilter = 'all';
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+        }
 
-document.querySelectorAll('.filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeFilter = btn.dataset.filter;
-    applyFilters();
-  });
-});
+        modalClose.addEventListener('click', closeModal);
+        
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
 
-document.getElementById('searchInput').addEventListener('input', applyFilters);
+        // Initialize on load (pulling from data.js)
+        window.addEventListener('DOMContentLoaded', () => {
+            if(typeof collegeData !== 'undefined') {
+                renderGrid(collegeData);
+            } else {
+                grid.innerHTML = '<p style="color:red; grid-column: 1/-1; text-align:center;">Error: data.js file not found or failed to load. Please ensure data.js is saved in the same folder.</p>';
+            }
+        });
 
-function applyFilters() {
-  const q = document.getElementById('searchInput').value.toLowerCase().trim();
-  let list = universities;
-  if (activeFilter !== 'all') list = list.filter(u => u.country === activeFilter);
-  if (q) list = list.filter(u =>
-    u.name.toLowerCase().includes(q) ||
-    u.city.toLowerCase().includes(q) ||
-    u.country.toLowerCase().includes(q) ||
-    u.programs.some(p => p.toLowerCase().includes(q))
-  );
-  renderCards(list);
-}
-
-// ── Init ────────────────────────────────────────────────
-renderCards(universities);
-</script>
+    </script>
 </body>
 </html>
